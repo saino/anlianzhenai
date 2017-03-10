@@ -1,4 +1,4 @@
-# KBaoAPP : 快宝app-寿险
+# anlianzhenai
 
 ## 使用说明
 >
@@ -33,6 +33,9 @@
 * package.json ：node 模块的配置文件， 通常用来 配置 node.js依赖包，所有有node.js插件依赖在此文件配置。
 * gulpfile.js ：gulp task 文件，定义了 如何用 gulp 开发和打包requirejs模块的 任务。
 * require-config.js:requirejs中的模块依赖和名称定义
+
+
+https://m.kbao123.com/3.0/share/product?userId=36c24440c2f245e597b64a1d8ed6a127&productId=583272721fd01b79e4e39a0d&isNew=0
 
 
 
