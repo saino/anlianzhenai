@@ -46,9 +46,9 @@
 				</div>
 				<div class="main_list_new_right">
 					<select id="ensurePlan">
-						<option value="min">标准计划</option>
-						<option value="mid">升级计划</option>
-						<option value="max">尊贵计划</option>
+						<option value="1">标准计划</option>
+						<option value="2">升级计划</option>
+						<option value="3">尊贵计划</option>
 					</select>
 					<img src="./images/111_03.png" class="main_list_new_right_img">
 				</div>
@@ -110,17 +110,17 @@
 				<div class="banner_bottom-content"><div class="banner_bottom"></div></div>
 				<div class="banner_duty_item">
 					<div class="duty_item_left">意外身故及伤残</div>
-					<div class="duty_item_right">10万</div>
+					<div class="duty_item_right" id="duty_num_1">10万</div>
 				</div>
 				<div class="banner_bottom-content"><div class="banner_bottom"></div></div>
 				<div class="banner_duty_item">
 					<div class="duty_item_left">一般医疗保险金(不限社保;包含住院医疗费用和特殊门诊医疗费用)</div>
-					<div class="duty_item_right">100万</div>
+					<div class="duty_item_right" id="duty_num_2">100万</div>
 				</div>
 				<div class="banner_bottom-content"><div class="banner_bottom"></div></div>
 				<div class="banner_duty_item">
 					<div class="duty_item_left">恶性肿瘤医疗保险金(不限社保;包含恶性肿瘤住院医疗费用和恶性肿瘤特殊门诊费用费用)</div>
-					<div class="duty_item_right">100万</div>
+					<div class="duty_item_right" id="duty_num_3">100万</div>
 				</div>
 				<div class="banner_bottom-content"><div class="banner_bottom"></div></div>
 				<div class="banner_duty_item">
@@ -139,8 +139,110 @@
 				<div class="product-text-item" id="product-text-3">理赔流程</div>
 				<div class="product-text-item" id="product-text-4">常见问题</div>
 			</div>
-			<div class="product-text-content">
-				<!-- <p style="white-space: normal; widows: 1;">1、本产品由安联财产保险(中国)有限公司承保。目前该公司在广州、深圳、佛山、东莞、江门、上海有分支机构。本产品的销售区域为全国。</p><p style="white-space: normal; widows: 1;">2、本产品的承保年龄为出生满30天-60周岁，最高续保年龄为80周岁（含）。被保险人须为投保人本人、其配偶、其父母、其子女。在中国境内工作或居住满183天以上外籍人士可购买。</p><p style="white-space: normal; widows: 1;">3、本产品承保职业类别为1-4类的被保险人。具体职业种类归属详见安联职业分类表。</p><p style="white-space: normal; widows: 1;">4、一般医疗保险金</p><p style="white-space: normal; widows: 1;">1）住院医疗保险金：检查检验费，治疗费，床位费，膳食费，护理费，药品费，重症监护室床位费等；</p><p style="white-space: normal; widows: 1;">2）特殊门诊医疗保险金：门诊肾透析费，器官移植后的门诊抗排异治疗费，门诊恶性肿瘤治疗费，包括化学医疗法，放射疗法，肿瘤免疫疗法，肿瘤内分泌疗法，肿瘤靶向疗法治疗费用；</p><p style="white-space: normal; widows: 1;">共享年度限额100万（标准计划），（扣除免赔额后）100%赔付。</p><p style="white-space: normal; widows: 1;">5、恶性肿瘤医疗保险金</p><p style="white-space: normal; widows: 1;">1）恶性肿瘤住院医疗保险金：检查检验费，治疗费，床位费，膳食费，护理费，药品费，重症监护室床位费等；</p><p style="white-space: normal; widows: 1;">2）恶性肿瘤特殊门诊保险金：化疗，放疗，免疫治疗，内分泌治疗，靶向治疗费用；</p><p style="white-space: normal; widows: 1;">共享额外年度限额100万（标准计划），（扣除免赔额后）100%赔付。</p><p style="white-space: normal; widows: 1;">6、被保险人首次投保或非连续投保时，疾病住院或特殊门诊等待期为30天，详见保险条款。</p><p style="white-space: normal; widows: 1;">7、本保险就诊医院要求：中华人民共和国境内（港、澳、台地区除外）合法经营的二级及二级以上医院，且不包括特需病房、外宾病房等，详见保险条款。</p><p style="white-space: normal; widows: 1;">8、若被保险人以有社会医疗保险身份投保，但未以社会医疗保险身份就诊并结算的，本保险按照应赔付金额的60%进行赔付。</p><p style="white-space: normal; widows: 1;">9、本保险无犹豫期，请您慎重选择购买，除法律法规或双方另有约定外，成功投保之后退保本公司仅退还保单未满期保费，退保将会造成您的损失。</p><p style="white-space: normal; widows: 1;">10、需填写健康问卷，保险合同将增加一页标准版本的客户健康告知确认的内容</p><p style="white-space: normal; widows: 1;">11、续年续交保费，不保证续保费率</p><p style="white-space: normal; widows: 1;">12、被保险人应满足日常居住地在中国大陆境内，即最近一年内在中国大陆境内（不含港澳台）工作或居住满183天的要求。</p><p style="white-space: normal; widows: 1;">13、本商品的具体保障内容，请以正式的保险条款为准，尤其请您认真阅读免责条款。如保单载明与保险条款内容不一致的，以保单载明为准。</p><p style="white-space: normal; widows: 1;">14、本产品受益人默认为法定继承人。</p><p style="white-space: normal; widows: 1;">15、本产品为网上投保、网上支付、网上即时核保，采用电子保单形式承保。保单为中英文互译，可满足使馆对英文保单的要求。可登录安联保险网站或拨打保险公司电话400-800-2020查询、验真。通过快保购买本产品，您可以享受双重服务，如您在购买过程中遇到任何问题，或后续保全变更、退保与理赔事务均可拨打客服热线400-818-9191协助您办理。</p><p style="white-space: normal; widows: 1;">16、您在购买产品过程中，如发现本公司有关人员有违法、违规行为，或认为自身权益受到侵犯，请您保留相关证据并向本公司投诉，投诉电话：400-818-9191。</p><p><span style="color: rgb(255, 0, 0);">17、本产品提供电子发票，投保成功后保险公司将以短信和邮件的方式发送，可自行点击链接进行下载，发票链接有效期为7天。</span></p><p style="white-space: normal; widows: 1;">&nbsp;</p><p><br></p> -->
+			<div class="product-text-content"></div>
+		</div>
+
+		<div id="product-policyholder">投保人信息</div>
+		<div class="product-policyholder-detail">
+			<div class="detail-item">
+				<div class="detail-item-text">起保时间:</div>
+				<input class="detail-item-input" value="付款次日零时" readonly="readonly"/>
+			</div>
+			<div class="detail-item">
+				<div class="detail-item-text">姓名:</div>
+				<input class="detail-item-input" placeholder="请输入您的姓名"/>
+			</div>
+			<div class="detail-item">
+				<div class="detail-item-text">手机:</div>
+				<input class="detail-item-input" placeholder="请输入您的手机号"/>
+			</div>
+			<div class="detail-item">
+				<div class="detail-item-text">邮箱:</div>
+				<input class="detail-item-input" placeholder="Mailbox"/>
+			</div>
+			<div class="detail-item">
+				<div class="detail-item-text">身份证:</div>
+				<input class="detail-item-input" placeholder="请输入您的证件号码"/>
 			</div>
 		</div>
+
+
+		<div id="product-policyholdered" class="product-policyholder">被保人信息</div>
+		<div class="product-policyholder-detail">
+			<div class="detail-item">
+				<div class="detail-item-text">与投保人关系:</div>
+				<select class="detail-item-input">
+					<option>请选择</option>
+					<option>本人</option>
+					<option>父亲</option>
+					<option>母亲</option>
+					<option>妻子</option>
+					<option>丈夫</option>
+					<option>儿子</option>
+					<option>女儿</option>
+				</select>
+			</div>
+			<div class="detail-item">
+				<div class="detail-item-text">姓名:</div>
+				<input class="detail-item-input" placeholder="请输入姓名"/>
+			</div>
+			<div class="detail-item">
+				<div class="detail-item-text">身份证:</div>
+				<input class="detail-item-input" placeholder="请输入证件号码"/>
+			</div>
+			<div class="detail-item">
+				<div class="detail-item-text">手机:</div>
+				<input class="detail-item-input" placeholder="请输入手机号"/>
+			</div>
+			<div class="detail-item">
+				<div class="detail-item-text">一级职业:</div>
+				<select class="detail-item-input">
+					<option>请选择</option>
+				<!-- 	<option>本人</option>
+					<option>父亲</option>
+					<option>母亲</option>
+					<option>妻子</option>
+					<option>丈夫</option>
+					<option>儿子</option>
+					<option>女儿</option> -->
+				</select>
+			</div>
+			<div class="detail-item">
+				<div class="detail-item-text">二级职业:</div>
+				<select class="detail-item-input">
+					<option>请选择</option>
+				<!-- 	<option>本人</option>
+					<option>父亲</option>
+					<option>母亲</option>
+					<option>妻子</option>
+					<option>丈夫</option>
+					<option>儿子</option>
+					<option>女儿</option> -->
+				</select>
+			</div>
+			<div class="detail-item">
+				<div class="detail-item-text">三级职业:</div>
+				<select class="detail-item-input">
+					<option>请选择</option>
+			<!-- 		<option>本人</option>
+					<option>父亲</option>
+					<option>母亲</option>
+					<option>妻子</option>
+					<option>丈夫</option>
+					<option>儿子</option>
+					<option>女儿</option> -->
+				</select>
+			</div>
+			
+		</div>
+
+	</div>
+
+
+
+	<div class="product-footer">
+		<div class="product-price">价格：xxx元</div>
+		<div class="product-buy">购买</div>
+	</div>
+
 </div>
