@@ -2,27 +2,12 @@
 @import "common/changePage";
 @import "common/msg-box";
 @import "common/common";
-@import "insurance/insurance";
-@import "plan/plan";
-@import "plan/additional";
-@import "plan/clauseList";
-@import "browseRecords/browseRecords";
-@import "detailsDescription/detailsDescription";
-@import "lifeInsurance/lifeInsurance";
-@import "productDetails/productDetails";
-@import "search/search";
-@import "attachDetails/attachDetails";
-@import "plan/makePlan";
-@import "plan/insuranceConcept";
-@import "personalPlan/personalPlan";
-@import "personalCollect/personalCollect";
-@import "personalCustomer/personalCustomer";
-@import "caseExplain/caseExplain";
+@import "home/home";
  
 
 /* CSS Document */
 /*init style*/
-*{margin:0px;padding:0px;-webkit-overflow-scrolling:touch;-webkit-tap-highlight-color:transparent;-webkit-touch-callout: none;}
+*{margin:0 auto;padding:0px;-webkit-overflow-scrolling:touch;-webkit-tap-highlight-color:transparent;-webkit-touch-callout: none;}
 :not(textarea,input) {
     -webkit-user-select: none;
 }
@@ -35,7 +20,7 @@
 body{
     font-size: 10px;
     overflow: hidden !important;
-    margin: 0;
+    margin: 0 auto;
     padding: 0;
     -webkit-user-select:none;
     user-select:none;
@@ -50,7 +35,7 @@ body{
 
 /*FZYBXSJW   FZDaHei*/
 * {
-    margin: 0;
+    margin: 0 auto;
     padding: 0;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -68,7 +53,7 @@ html {
 }
 body,ul,li {
     padding: 0;
-    margin: 0;
+    margin: 0 auto;
     border: 0;
 }
 
