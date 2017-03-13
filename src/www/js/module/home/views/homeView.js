@@ -21,6 +21,7 @@ define([
         //常见问题
         changjianwenti: '<p style="white-space: normal;"><strong>Q1:臻爱医疗的续保流程是怎样的？</strong></p><p style="white-space: normal;">A1:本合同期满，投保人可向保险人申请连续投保本合同，续保没有等待期，不需要重新填写健康告知。本合同为非保证续保合同，投保人连续投保本合同须经保险人审核同意。续保时保险人有权根据医疗费 用水平变化、本险种整体经营状况及被保险人年龄对费率等进行调整。在投保人接受费率等调整的前提下，保险人方可为投保人办理连续投保手续。</p><p style="white-space: normal;">对于符合续保条件的客户，我们也会按正常的续保流程，每月发送续保通知书/续保清单给到渠道。</p><p style="white-space: normal;"><br></p><p style="white-space: normal;"><strong>Q2：如续保通知书发送后，客户才检查出恶性肿瘤疾病，是否能继续承保？</strong></p><p style="white-space: normal;">A2：自本续保通知书发出日至续保保单生效日期间，若被保险人的风险状况改变，投保人/ 保险人应及时通知，保险公司有权修改续保条件/价格或撤销本续保通知书。</p><p style="white-space: normal;"><br></p><p style="white-space: normal;"><strong>Q3：如保单即将到期时确诊，住院产生医疗费用，那么跨保险年度住院是否赔付医疗费用？</strong></p><p style="white-space: normal;">A3：关于被保险人跨保险年度住院所产生的医疗费用属于保险责任范围内的，我司将按保险条款约定执行如下：</p><p style="white-space: normal;">1. 如被保险人正常续保或条件续保，其在保单终保时间前产生的住院医疗费用按当年度保单保险责任予以给付；其在保单终保时间后产生的住院医疗费用按续保年度保单保险责任予以给付。</p><p style="white-space: normal;">2．如被保险人不能续保，对于其住院产生的医疗费用属于保险责任范围内的，依照当年度保单保险条款约定予以给付。</p><p style="white-space: normal;"><br></p><p style="white-space: normal;"><strong>Q4:如果客户有社保，以有社保身份购买这个产品，但是实际就医过程中并没有使用社保，如何理赔？</strong></p><p style="white-space: normal;">A4:若被保险人以有社会医疗保险身份投保，但未以社会医疗保险身份就诊并结算的，本保险按照应赔付金额的60%进行赔付。举个栗子：</p><p style="white-space: normal;">小安有社保，在**人寿和安联财险分别有住院保险。某次住院及特殊门诊花费合理费用5.6万，其中由于异地就医并没有使用社保，**人寿报销0.8万，小安可到安联报销以下金额：[5.6-0.8-(1-0.8)]*0.6=2.76万，按赔付金额的60%进行赔付。本次医疗费用，小安自付部分为：5.6-0.8-2.76=2.04万</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><strong>Q5:如果客户投保时无社保，投保了无社保的臻爱计划，但是半年后客户需要理赔的时候已经有社保，是否可以直接提交理赔而不通过社保？</strong></p><p style="white-space: normal;">A5：理赔时客户如果已有参保，即使购买的无社保计划，仍然需要按照实际情况先申报社保。如果没有经过社保，那么会按60%的赔付处理。</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><strong>Q6: 如果客户是无社保的，2个月后才会购买社保，是否可以买有社保的计划？</strong></p><p style="white-space: normal;">A6：如现在投保就购买无社保的计划，或者2个月之后有社保之后再购买有社保的计划。</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><strong>Q7:如果客户是无社保的，但是购买了有社保的计划，已经过了30日的疾病等待期，等待期内没有任何理赔事项。</strong></p><p style="white-space: normal;">A7:建议客户退保（按未满期净保费折算），重新购买无社保的计划,疾病住院或特殊门诊仍有30天等待期。</p><p><br></p>',
 
+        money: 152,
         //投保人信息验证
         policyholder:{
             name: null,
@@ -34,14 +35,15 @@ define([
             name: null,
             cardId: null,
             phone: null,
-            work1: null,
-            work2: null,
-            work3: null,
+            work1: 0,
+            work2: 0,
+            work3: 0,
             hasSocialSecurity: "has",
             minAge: 16,
             maxAge: 20,
             minDay: null,
             ensurePlan: 1,
+            searchCode: "ZAAMIPS(SI)",
         },
 
 
@@ -72,9 +74,14 @@ define([
             policyholderedWork1: "#policyholdered-work-1",        //被保人一级职业
             policyholderedWork2: "#policyholdered-work-2",        //被保人一级职业
             policyholderedWork3: "#policyholdered-work-3",        //被保人一级职业
+            // healthTell1: "input[name=health-tell-1]",        //健康告知一
+
+            toBuy: "#to-buy",      //确定购买
 
         },
          events : {
+            "tap @ui.healthTell1": "onclickHealthTell1",
+
             "tap @ui.productTextNav": "onClickProductTextNav",  
             "change @ui.ensurePlan": "onChangEnsurePlan", 
             "change @ui.hasSocialSecurity": "onChangeHasSocialSecurity",
@@ -91,17 +98,491 @@ define([
             "blur @ui.policyholderedId": "onBlurPolicyholderedId",
             "blur @ui.policyholderedPhone": "onBlurPolicyholderedPhone",
             "change @ui.policyholderedWork1": "onChangePolicyholderedWork1",
+            "tap @ui.policyholderedWork2": "onClickPolicyholderedWork2",
             "change @ui.policyholderedWork2": "onChangePolicyholderedWork2",
+            "tap @ui.policyholderedWork3": "onClickPolicyholderedWork3",
             "change @ui.policyholderedWork3": "onChangePolicyholderedWork3",
+            //确定购买
+            "tap @ui.toBuy": "onClickTobuy",
+
+        },
+        calMoney: function(minAge, maxAge, hasSocialSecurity, ensurePlan){
+            if(0<=minAge&&maxAge<=5){
+                if(hasSocialSecurity=="has"&&ensurePlan=="1"){
+                    this.money = 690;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="1"){
+                    this.money = 1377;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="2"){
+                    this.money = 818;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="2"){
+                    this.money = 1573;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="3"){
+                    this.money = 945
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="3"){
+                    this.money = 1769             
+                }
+            }
+            if(6<=minAge&&maxAge<=10){
+                if(hasSocialSecurity=="has"&&ensurePlan=="1"){
+                    this.money = 281;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="1"){
+                    this.money = 520;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="2"){
+                    this.money = 368;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="2"){
+                    this.money = 630;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="3"){
+                    this.money = 454
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="3"){
+                    this.money = 741             
+                }
+            }
+            if(11<=minAge&&maxAge<=15){
+                if(hasSocialSecurity=="has"&&ensurePlan=="1"){
+                    this.money = 165;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="1"){
+                    this.money = 277;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="2"){
+                    this.money = 240;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="2"){
+                    this.money = 363;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="3"){
+                    this.money = 315
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="3"){
+                    this.money = 449             
+                }
+            }
+            if(16<=minAge&&maxAge<=20){
+                if(hasSocialSecurity=="has"&&ensurePlan=="1"){
+                    this.money = 152;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="1"){
+                    this.money = 248;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="2"){
+                    this.money = 225;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="2"){
+                    this.money = 331;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="3"){
+                    this.money = 299
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="3"){
+                    this.money = 414             
+                }
+            }
+            if(21<=minAge&&maxAge<=25){
+                if(hasSocialSecurity=="has"&&ensurePlan=="1"){
+                    this.money = 206;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="1"){
+                    this.money = 360;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="2"){
+                    this.money = 285;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="2"){
+                    this.money = 454;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="3"){
+                    this.money = 365
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="3"){
+                    this.money = 549             
+                }
+            }
+            if(26<=minAge&&maxAge<=30){
+                if(hasSocialSecurity=="has"&&ensurePlan=="1"){
+                    this.money = 269;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="1"){
+                    this.money = 493;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="2"){
+                    this.money = 354;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="2"){
+                    this.money = 601;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="3"){
+                    this.money = 440
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="3"){
+                    this.money = 790             
+                }
+            }
+            if(31<=minAge&&maxAge<=35){
+                if(hasSocialSecurity=="has"&&ensurePlan=="1"){
+                    this.money = 344;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="1"){
+                    this.money = 689;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="2"){
+                    this.money = 437;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="2"){
+                    this.money = 816;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="3"){
+                    this.money = 529
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="3"){
+                    this.money = 944             
+                }
+            }
+            if(36<=minAge&&maxAge<=40){
+                if(hasSocialSecurity=="has"&&ensurePlan=="1"){
+                    this.money = 437;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="1"){
+                    this.money = 1066;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="2"){
+                    this.money = 539;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="2"){
+                    this.money = 1165;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="3"){
+                    this.money = 641
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="3"){
+                    this.money = 1325             
+                }
+            }
+            if(41<=minAge&&maxAge<=45){
+                if(hasSocialSecurity=="has"&&ensurePlan=="1"){
+                    this.money = 521;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="1"){
+                    this.money = 1402;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="2"){
+                    this.money = 632;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="2"){
+                    this.money = 1601;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="3"){
+                    this.money = 742
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="3"){
+                    this.money = 1800             
+                }
+            }
+            if(46<=minAge&&maxAge<=50){
+                if(hasSocialSecurity=="has"&&ensurePlan=="1"){
+                    this.money = 698;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="1"){
+                    this.money = 2130;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="2"){
+                    this.money = 827;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="2"){
+                    this.money = 2402;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="3"){
+                    this.money = 955
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="3"){
+                    this.money = 2673             
+                }
+            }
+            if(51<=minAge&&maxAge<=55){
+                if(hasSocialSecurity=="has"&&ensurePlan=="1"){
+                    this.money = 893;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="1"){
+                    this.money = 2848;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="2"){
+                    this.money = 1041;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="2"){
+                    this.money = 3191;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="3"){
+                    this.money = 1189
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="3"){
+                    this.money = 3534             
+                }
+            }
+            if(56<=minAge&&maxAge<=60){
+                if(hasSocialSecurity=="has"&&ensurePlan=="1"){
+                    this.money = 1169;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="1"){
+                    this.money = 3365;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="2"){
+                    this.money = 1344;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="2"){
+                    this.money = 4090;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="3"){
+                    this.money = 1520
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="3"){
+                    this.money = 4515             
+                }
+            }
+            if(61<=minAge&&maxAge<=65){
+                if(hasSocialSecurity=="has"&&ensurePlan=="1"){
+                    this.money = 1597;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="1"){
+                    this.money = 4938;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="2"){
+                    this.money = 1815;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="2"){
+                    this.money = 5491;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="3"){
+                    this.money = 2033
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="3"){
+                    this.money = 6043             
+                }
+            }
+            if(66<=minAge&&maxAge<70){
+                if(hasSocialSecurity=="has"&&ensurePlan=="1"){
+                    this.money = 2045;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="1"){
+                    this.money = 6329;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="2"){
+                    this.money = 2308;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="2"){
+                    this.money = 7072;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="3"){
+                    this.money = 2571
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="3"){
+                    this.money = 7712             
+                }
+            }
+            if(71<=minAge&&maxAge<=75){
+                if(hasSocialSecurity=="has"&&ensurePlan=="1"){
+                    this.money = 2709;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="1"){
+                    this.money = 8389;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="2"){
+                    this.money = 3038;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="2"){
+                    this.money = 9286;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="3"){
+                    this.money = 3368
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="3"){
+                    this.money = 10184             
+                }
+            }
+            if(76<=minAge&&maxAge<=80){
+                if(hasSocialSecurity=="has"&&ensurePlan=="1"){
+                    this.money = 3360;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="1"){
+                    this.money = 1034;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="2"){
+                    this.money = 3754;
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="2"){
+                    this.money = 11432;
+                }
+                if(hasSocialSecurity=="has"&&ensurePlan=="3"){
+                    this.money = 4149
+                }
+                if(hasSocialSecurity=="no"&&ensurePlan=="3"){
+                    this.money = 12525             
+                }
+            }
+            console.log(("5">=76));
+        },
+        setSearchCode: function(ensurePlan, hasSocialSecurity){
+            if(ensurePlan=="1" && hasSocialSecurity=="has"){
+                return "ZAAMIPS(SI)";
+            }
+            if(ensurePlan=="1" && hasSocialSecurity=="no"){
+                return "ZAAMIPS(NSI)";
+            }
+            if(ensurePlan=="2" && hasSocialSecurity=="has"){
+                return "ZAAMIPU(SI)";
+            }
+            if(ensurePlan=="2" && hasSocialSecurity=="no"){
+                return "ZAAMIPU(NSI)";
+            }
+            if(ensurePlan=="3" && hasSocialSecurity=="has"){
+                return "ZAAMIPH(SI)";
+            }
+            if(ensurePlan=="3" && hasSocialSecurity=="no"){
+                return "ZAAMIPH(NSI)";
+            }
+        },
+        onclickHealthTell1: function(e){
+            e.stopPropagation();
+            // e.preventDefault();
+            // console.log("......dddd");
+            // console.log(this.ui.healthTell1.)
+        },
+        onClickTobuy: function(e){
+            e.stopPropagation();
+            e.preventDefault();
+// console.log($("input[name=health-tell-1]:checked").val()=="yes");
+            if(!this.policyholderDone()){
+                return;
+            }
+            if(!this.policyholderedDone()){
+                return;
+            }
+
+
+            if($("input[name=health-tell-1]:checked").val()=="yes"){
+                alert("您的投保不符合健康条件第一条");
+                return;
+            }
+            if($("input[name=health-tell-2]:checked").val()=="yes"){
+                alert("您的投保不符合健康条件第二条");
+                return;
+            }
+            if($("input[name=health-tell-3]:checked").val()=="yes"){
+                alert("您的投保不符合健康条件第三条");
+                return;
+            }
+            if($("input[name=health-tell-4]:checked").val()=="yes"){
+                alert("您的投保不符合健康条件第四条");
+                return;
+            }
+            if($("input[name=health-tell-5]:checked").val()=="yes"){
+                alert("您的投保不符合健康条件第五条");
+                return;
+            }
+            if($("input[name=health-tell-6]:checked").val()=="yes"){
+                alert("您的投保不符合健康条件第六条");
+                return;
+            }
+            if($("input[name=health-tell-7]:checked").val()=="yes"){
+                alert("您的投保不符合健康条件第七条");
+                return;
+            }
+            if($("input[name=health-tell-8]:checked").val()=="yes"){
+                alert("您的投保不符合健康条件第八条");
+                return;
+            }
+
+            // console.log($("input[name=health-tell-2]:checked").val());
+            // console.log($("input[name=health-tell-3]:checked").val());
+            // console.log($("input[name=health-tell-4]:checked").val());
+            // console.log($("input[name=health-tell-5]:checked").val());
+            // console.log($("input[name=health-tell-6]:checked").val());
+            // console.log($("input[name=health-tell-7]:checked").val());
+            // console.log($("input[name=health-tell-8]:checked").val());
+
+            // console.log("dddddd");
+            console.log(this.policyholder);
+            console.log(this.policyholdered);
+            // console.log(this.ui.healthTell1);
+        },
+        policyholderedDone: function(){
+            if(this.policyholdered.relation == "0"){
+                alert("未选择被保人与投保人关系");
+                return false;
+            }
+            if(!this.policyholdered.name){
+                alert("被保人姓名不正确");
+                return false;
+            }
+            if(!this.policyholdered.cardId){
+                alert("被保人身份证号码不正确");
+                return false;
+            }else{
+                console.log("被保人的年龄与您选择的投保方案不符");
+            }
+            if(!this.policyholdered.phone){
+                alert("被保人手机号码不正确");
+                return false;
+            }
+            if(this.policyholdered.work1 == "0"){
+                alert("请选择被保人一级职业");
+                return false;
+            }
+            if(this.policyholdered.work2 == "0"){
+                alert("请选择被保人二级职业");
+                return false;
+            }
+            if(this.policyholdered.work3 == "0"){
+                alert("请选择被保人三级职业");
+                return false;
+            }
+            return true;
         },
         onChangePolicyholderedWork3: function(e){
             e.stopPropagation();
+            e.preventDefault();
+            this.policyholdered.work3 = this.ui.policyholderedWork3[0].value;
+
+        },
+        onClickPolicyholderedWork3: function(e){
+            e.stopPropagation();
+            if(this.policyholdered.work2=="0"){
+                e.preventDefault();
+                alert("请选择上一级职业");
+            }
         },
         onChangePolicyholderedWork2: function(e){
             e.stopPropagation();
+            e.preventDefault();
+
+            this.policyholdered.work2 = this.ui.policyholderedWork2[0].value;
+            if(this.policyholdered.work2=="0"){
+                this.ui.policyholderedWork3[0].value = "0";
+            }
+        },
+        onClickPolicyholderedWork2: function(e){
+            e.stopPropagation();
+            if(this.policyholdered.work1=="0"){
+                e.preventDefault();
+                alert("请选择上一级职业");
+            }
         },
         onChangePolicyholderedWork1: function(e){
             e.stopPropagation();
+            e.preventDefault();
+            this.policyholdered.work1 = this.ui.policyholderedWork1[0].value;
+            if(this.policyholdered.work1=="0"){
+                this.ui.policyholderedWork2[0].value = "0";
+                this.ui.policyholderedWork3[0].value = "0";
+            }
         },
         //被保人手机
         onBlurPolicyholderedPhone: function(e){
@@ -257,7 +738,7 @@ define([
         onBlurPolicyholderName: function(e){
             e.stopPropagation(e);
             var name = e.target.value;
-            console.log(name);
+            // console.log(name);
             if(!name){
                 this.policyholder.name = null;
                 return;
@@ -302,11 +783,20 @@ define([
             this.ui.dutyNum1.html(10*this.ui.ensurePlan[0].value);
             this.ui.dutyNum2.html(100*this.ui.ensurePlan[0].value);
             this.ui.dutyNum3.html(100*this.ui.ensurePlan[0].value);
+            this.policyholdered.searchCode = this.setSearchCode(this.policyholdered.ensurePlan,this.policyholdered.hasSocialSecurity);
+            this.calMoney(this.policyholdered.minAge, this.policyholdered.maxAge, this.policyholdered.hasSocialSecurity, this.policyholdered.ensurePlan);
+            // console.log(this.money, this.policyholdered);
+            $(".product-price").html("价格："+this.money+"元");
+
         },
         onChangeHasSocialSecurity: function(e){
             e.stopPropagation();
             // console.log(this.ui.hasSocialSecurity[0].value);
             this.policyholdered.hasSocialSecurity = this.ui.hasSocialSecurity[0].value;
+            this.policyholdered.searchCode = this.setSearchCode(this.policyholdered.ensurePlan,this.policyholdered.hasSocialSecurity);
+            this.calMoney(this.policyholdered.minAge, this.policyholdered.maxAge, this.policyholdered.hasSocialSecurity, this.policyholdered.ensurePlan);
+            $(".product-price").html("价格："+this.money+"元");
+            // console.log(this.money, this.policyholdered);
         },
         onchangeEnsureAge: function(e){
             e.stopPropagation();
@@ -314,6 +804,9 @@ define([
             this.policyholdered.maxAge = ensureAge.maxAge;
             this.policyholdered.minAge = ensureAge.minAge;
             this.policyholdered.minDay = ensureAge.minday;
+            this.calMoney(this.policyholdered.minAge, this.policyholdered.maxAge, this.policyholdered.hasSocialSecurity, this.policyholdered.ensurePlan);
+            // console.log(this.money, this.policyholdered);
+            $(".product-price").html("价格："+this.money+"元");
         },
         onClickProductBuy: function(e){
             e.stopPropagation();

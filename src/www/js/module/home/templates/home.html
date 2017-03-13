@@ -80,7 +80,7 @@
 				<div class="main_list_new_right">
 					<select id="ensureAge">
 						<option value='{"minAge":16,"maxAge":20,"minday":null}'>16周岁-20周岁</option>
-						<option value='{"minAge":null,"maxAge":5,"minday":30}'>30天-5周岁</option>				    
+						<option value='{"minAge":0,"maxAge":5,"minday":30}'>0岁-5周岁</option>				    
 						<option value='{"minAge":6,"maxAge":10,"minday":null}'>6周岁-10周岁</option>
 						<option value='{"minAge":11,"maxAge":15,"minday":null}'>11周岁-15周岁</option>
 						<option value='{"minAge":21,"maxAge":25,"minday":null}'>21周岁-25周岁</option>
@@ -90,6 +90,11 @@
 						<option value='{"minAge":41,"maxAge":45,"minday":null}'>41周岁-45周岁</option>
 						<option value='{"minAge":46,"maxAge":50,"minday":null}'>46周岁-50周岁</option>
 						<option value='{"minAge":51,"maxAge":55,"minday":null}'>51周岁-55周岁</option>
+						<option value='{"minAge":56,"maxAge":60,"minday":null}'>56周岁-60周岁</option>
+						<option value='{"minAge":61,"maxAge":65,"minday":null}'>61周岁-65周岁</option>
+						<option value='{"minAge":66,"maxAge":70,"minday":null}'>66周岁-70周岁</option>
+						<option value='{"minAge":71,"maxAge":75,"minday":null}'>71周岁-75周岁</option>
+						<option value='{"minAge":76,"maxAge":80,"minday":null}'>76周岁-80周岁</option>
 					</select>
 					<img src="./images/111_03.png" class="main_list_new_right_img">
 				</div>
@@ -197,22 +202,23 @@
 			<div class="detail-item">
 				<div class="detail-item-text">一级职业:</div>
 				<select id="policyholdered-work-1" class="detail-item-input">
-					<option>请选择</option>
+					<option value="0">请选择</option>
+					<option value="2">请选</option>
 			
 				</select>
 			</div>
 			<div class="detail-item">
 				<div class="detail-item-text">二级职业:</div>
 				<select id="policyholdered-work-2" class="detail-item-input">
-					<option>请选择</option>
-			
+					<option value="0">请选择</option>
+					<option value="2">请选</option>
 				</select>
 			</div>
 			<div class="detail-item">
 				<div class="detail-item-text">三级职业:</div>
 				<select id="policyholdered-work-3" class="detail-item-input">
-					<option>请选择</option>
-	
+					<option value="0">请选择</option>
+					<option value="2">请选</option>
 				</select>
 			</div>
 			
@@ -224,8 +230,8 @@
 					1、被保险人最近1年内是否进行任何健康咨询、药物治疗、外科手术，但不包括普通感冒、流感或敏感症；或是否在最近1年内考虑寻求诊疗、检查、测试、住院治疗或外科手术；
 				</div>
 				<div class="product-list-health-tell-selcet">
-					<input type="radio" name="health-tell-1" value="yes">是
-					<input type="radio" name="health-tell-1" value="no" checked>否
+					<input type="radio" name="health-tell-1" value="yes" checked>是
+					<input type="radio" name="health-tell-1" value="no">否
 				</div>
 			</div>
 			<div class="product-list-health-tell-item">
@@ -233,8 +239,8 @@
 					2、被保险人最近5年中，在申请如人寿保险、意外伤害保险，重大疾病保险、其它医疗健康保险等任何保险计划时，是否曾被延迟、被拒保、被撤销或被附加任何特别条件（如增加保险费或特别免责条款）；
 				</div>
 				<div class="product-list-health-tell-selcet">
-					<input type="radio" name="health-tell-2" value="yes">是
-					<input type="radio" name="health-tell-2" value="no" checked>否
+					<input type="radio" name="health-tell-2" value="yes" checked>是
+					<input type="radio" name="health-tell-2" value="no">否
 				</div>
 			</div>
 			<div class="product-list-health-tell-item">
@@ -242,8 +248,8 @@
 					3、被保险人是否曾经或正患有如下任一疾病、是否曾经或正出现如下任一体征、是否曾经或正出现如下任一检查异常或是否曾经或正接受如下任一治疗（相关定义以世界卫生组织颁布的《疾病和有关健康问题的国际统计分类（ICD-10）》为准）： (1)冠心病、心绞痛、心肌梗塞、心脏瓣膜疾病、各种原因导致的心脏衰竭、先天性心脏缺陷、冠状动脉介入手术或搭桥手术、动脉瘤或血管畸形、血友病、血液凝固障碍、脑卒中； (2)痴呆、癫痫、多发性硬化、帕金森病、阿尔茨海默病或任何影响脑部或神经系统的失常； (3)肝脏疾病或症状（如肝炎病毒携带者、肝硬化、肝功能衰竭等）、胃旁路手术、溃疡性结肠炎、胰腺炎； (4)代谢综合症、各种类型糖尿病、高血压、肾上腺皮质功能不全、肢端肥大症； (5)恶性肿瘤、白血病、淋巴瘤、良性肿瘤且未手术、不明性质的肿块/息肉/结节/新生物； (6)精神病、各种类型的抑郁症、自闭症、厌食症或暴食症、试图自杀； (7)耳疾（如耳聋等）、眼疾（如青光眼、白内障、视网膜出血或剥离等）、鼻部疾病或咽喉疾病（不包括普通感染）； (8)肢体瘫痪（包括截瘫、偏瘫或全瘫）、类风湿性关节炎、强直性脊柱炎、肌营养不良、股骨头坏死、人工关节置换等其他与骨骼、脊椎骨或肌肉相关的疾病或症状； (9) 肾小球（肾盂）疾病、肾病综合症、慢性肾功能衰竭、肾透析、多囊肾； (10) 肺气肿、慢性阻塞性肺病、肺纤维化、间质性肺病、哮喘； (11) 各种器官移植，如心、肺、肝、肾、胰脏、造血干细胞移植等；
 				</div>
 				<div class="product-list-health-tell-selcet">
-					<input type="radio" name="health-tell-3" value="yes">是
-					<input type="radio" name="health-tell-3" value="no" checked>否
+					<input type="radio" name="health-tell-3" value="yes" checked>是
+					<input type="radio" name="health-tell-3" value="no">否
 				</div>
 			</div>
 			<div class="product-list-health-tell-item">
@@ -251,8 +257,8 @@
 					4、被保险人最近2年中，是否做过以下任意一项检查，且任意一项检查结果有异常：X光、B超、彩超、CT、核磁共振、内窥镜、病理活检、眼底检查、血液检查；
 				</div>
 				<div class="product-list-health-tell-selcet">
-					<input type="radio" name="health-tell-4" value="yes">是
-					<input type="radio" name="health-tell-4" value="no" checked>否
+					<input type="radio" name="health-tell-4" value="yes" checked>是
+					<input type="radio" name="health-tell-4" value="no">否
 				</div>
 			</div>
 			<div class="product-list-health-tell-item">
@@ -260,8 +266,8 @@
 					5、被保险人最近1年中，是否因病连续住院5天及以上，或病假累计15天及以上；
 				</div>
 				<div class="product-list-health-tell-selcet">
-					<input type="radio" name="health-tell-5" value="yes">是
-					<input type="radio" name="health-tell-5" value="no" checked>否
+					<input type="radio" name="health-tell-5" value="yes" checked>是
+					<input type="radio" name="health-tell-5" value="no">否
 				</div>
 			</div>
 			<div class="product-list-health-tell-item">
@@ -269,8 +275,8 @@
 					6、被保险人最近1年，是否有任何不适症状，如持续发热、眩晕、胸痛、咳血、便血、紫斑、体重下降或上升超过5公斤；
 				</div>
 				<div class="product-list-health-tell-selcet">
-					<input type="radio" name="health-tell-6" value="yes">是
-					<input type="radio" name="health-tell-6" value="no" checked>否
+					<input type="radio" name="health-tell-6" value="yes" checked>是
+					<input type="radio" name="health-tell-6" value="no">否
 				</div>
 			</div>
 			<div class="product-list-health-tell-item">
@@ -278,8 +284,8 @@
 					7、被保险人是否：艾滋病毒感染史、酗酒史、滥用药物史（酗酒是指每周饮酒单位大于等于50，每一个饮酒单位含12g酒精，相当于1杯（300ml）啤酒或者半杯（150ml）葡萄酒或者45ml白酒）；
 				</div>
 				<div class="product-list-health-tell-selcet">
-					<input type="radio" name="health-tell-7" value="yes">是
-					<input type="radio" name="health-tell-7" value="no" checked>否
+					<input type="radio" name="health-tell-7" value="yes" checked>是
+					<input type="radio" name="health-tell-7" value="no">否
 				</div>
 			</div>
 			<div class="product-list-health-tell-item">
@@ -287,8 +293,8 @@
 					8、2周岁以下被保险人出生时体重是否低于2.5公斤，是否早产、窒息、发育迟缓、脑瘫。
 				</div>
 				<div class="product-list-health-tell-selcet">
-					<input type="radio" name="health-tell-8" value="yes">是
-					<input type="radio" name="health-tell-8" value="no" checked>否
+					<input type="radio" name="health-tell-8" value="yes" checked>是
+					<input type="radio" name="health-tell-8" value="no">否
 				</div>
 			</div>
 		</div>
@@ -299,7 +305,7 @@
 
 
 	<div class="product-footer">
-		<div class="product-price">价格：xxx元</div>
+		<div class="product-price">价格：152元</div>
 		<div class="product-buy">购买</div>
 	</div>
 
