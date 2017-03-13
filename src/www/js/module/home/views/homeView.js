@@ -4,7 +4,7 @@
 define([
     'common/base/base_view',
     'text!module/home/templates/home.html',
-    'marionette'
+    'marionette',
 ],function(BaseView, homeTPL, mn) {
     return BaseView.extend({
         id : "home",
@@ -21,9 +21,31 @@ define([
         //常见问题
         changjianwenti: '<p style="white-space: normal;"><strong>Q1:臻爱医疗的续保流程是怎样的？</strong></p><p style="white-space: normal;">A1:本合同期满，投保人可向保险人申请连续投保本合同，续保没有等待期，不需要重新填写健康告知。本合同为非保证续保合同，投保人连续投保本合同须经保险人审核同意。续保时保险人有权根据医疗费 用水平变化、本险种整体经营状况及被保险人年龄对费率等进行调整。在投保人接受费率等调整的前提下，保险人方可为投保人办理连续投保手续。</p><p style="white-space: normal;">对于符合续保条件的客户，我们也会按正常的续保流程，每月发送续保通知书/续保清单给到渠道。</p><p style="white-space: normal;"><br></p><p style="white-space: normal;"><strong>Q2：如续保通知书发送后，客户才检查出恶性肿瘤疾病，是否能继续承保？</strong></p><p style="white-space: normal;">A2：自本续保通知书发出日至续保保单生效日期间，若被保险人的风险状况改变，投保人/ 保险人应及时通知，保险公司有权修改续保条件/价格或撤销本续保通知书。</p><p style="white-space: normal;"><br></p><p style="white-space: normal;"><strong>Q3：如保单即将到期时确诊，住院产生医疗费用，那么跨保险年度住院是否赔付医疗费用？</strong></p><p style="white-space: normal;">A3：关于被保险人跨保险年度住院所产生的医疗费用属于保险责任范围内的，我司将按保险条款约定执行如下：</p><p style="white-space: normal;">1. 如被保险人正常续保或条件续保，其在保单终保时间前产生的住院医疗费用按当年度保单保险责任予以给付；其在保单终保时间后产生的住院医疗费用按续保年度保单保险责任予以给付。</p><p style="white-space: normal;">2．如被保险人不能续保，对于其住院产生的医疗费用属于保险责任范围内的，依照当年度保单保险条款约定予以给付。</p><p style="white-space: normal;"><br></p><p style="white-space: normal;"><strong>Q4:如果客户有社保，以有社保身份购买这个产品，但是实际就医过程中并没有使用社保，如何理赔？</strong></p><p style="white-space: normal;">A4:若被保险人以有社会医疗保险身份投保，但未以社会医疗保险身份就诊并结算的，本保险按照应赔付金额的60%进行赔付。举个栗子：</p><p style="white-space: normal;">小安有社保，在**人寿和安联财险分别有住院保险。某次住院及特殊门诊花费合理费用5.6万，其中由于异地就医并没有使用社保，**人寿报销0.8万，小安可到安联报销以下金额：[5.6-0.8-(1-0.8)]*0.6=2.76万，按赔付金额的60%进行赔付。本次医疗费用，小安自付部分为：5.6-0.8-2.76=2.04万</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><strong>Q5:如果客户投保时无社保，投保了无社保的臻爱计划，但是半年后客户需要理赔的时候已经有社保，是否可以直接提交理赔而不通过社保？</strong></p><p style="white-space: normal;">A5：理赔时客户如果已有参保，即使购买的无社保计划，仍然需要按照实际情况先申报社保。如果没有经过社保，那么会按60%的赔付处理。</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><strong>Q6: 如果客户是无社保的，2个月后才会购买社保，是否可以买有社保的计划？</strong></p><p style="white-space: normal;">A6：如现在投保就购买无社保的计划，或者2个月之后有社保之后再购买有社保的计划。</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><strong>Q7:如果客户是无社保的，但是购买了有社保的计划，已经过了30日的疾病等待期，等待期内没有任何理赔事项。</strong></p><p style="white-space: normal;">A7:建议客户退保（按未满期净保费折算），重新购买无社保的计划,疾病住院或特殊门诊仍有30天等待期。</p><p><br></p>',
 
+        //投保人信息验证
+        policyholder:{
+            name: null,
+            phone: null,
+            email: null,
+            cardId: null
+        },
+        //被保人信息验证
+        policyholdered:{
+            relation: 0,
+            name: null,
+            cardId: null,
+            phone: null,
+            work1: null,
+            work2: null,
+            work3: null,
+            hasSocialSecurity: "has",
+            minAge: 16,
+            maxAge: 20,
+            minDay: null,
+            ensurePlan: 1,
+        },
+
+
         ui : {
-            
-            
             product: ".product",
             productDetail: ".product-detail",
             productTextContent: ".product-text-content",
@@ -37,6 +59,210 @@ define([
             dutyNum2: "#duty_num_2",
             dutyNum3: "#duty_num_3",
             productBuy: ".product-buy",         //点击购买
+
+            policyholderName: "#policyholder-name",    //投保人姓名
+            policyholderPhone: "#policyholder-phone",  //投保人手机
+            policyholderEmail: "#policyholder-email",  //投保人邮箱
+            policyholderId: "#policyholder-id",        //投保人身份证
+
+            policyholderedRelation: "#policyholdered-relation",    //与被保人关系
+            policyholderedName: "#policyholdered-name",            //被保人姓名
+            policyholderedId: "#policyholdered-id",                //被保人身份证
+            policyholderedPhone: "#policyholdered-phone",          //被保人手机
+            policyholderedWork1: "#policyholdered-work-1",        //被保人一级职业
+            policyholderedWork2: "#policyholdered-work-2",        //被保人一级职业
+            policyholderedWork3: "#policyholdered-work-3",        //被保人一级职业
+
+        },
+         events : {
+            "tap @ui.productTextNav": "onClickProductTextNav",  
+            "change @ui.ensurePlan": "onChangEnsurePlan", 
+            "change @ui.hasSocialSecurity": "onChangeHasSocialSecurity",
+            "change @ui.ensureAge": "onchangeEnsureAge",
+            "tap @ui.productBuy": "onClickProductBuy",
+            //投保人
+            "blur @ui.policyholderName": "onBlurPolicyholderName",
+            "blur @ui.policyholderPhone": "onBlurPolicyholderPhone",
+            "blur @ui.policyholderId": "onBlurPolicyholderId",
+            "blur @ui.policyholderEmail": "onBlurPolicyholderEmail",
+            //被保人
+            "change @ui.policyholderedRelation": "onChangePolicyholderedRelation",
+            "blur @ui.policyholderedName": "onBlurPolicyholderedName",
+            "blur @ui.policyholderedId": "onBlurPolicyholderedId",
+            "blur @ui.policyholderedPhone": "onBlurPolicyholderedPhone",
+            "change @ui.policyholderedWork1": "onChangePolicyholderedWork1",
+            "change @ui.policyholderedWork2": "onChangePolicyholderedWork2",
+            "change @ui.policyholderedWork3": "onChangePolicyholderedWork3",
+        },
+        onChangePolicyholderedWork3: function(e){
+            e.stopPropagation();
+        },
+        onChangePolicyholderedWork2: function(e){
+            e.stopPropagation();
+        },
+        onChangePolicyholderedWork1: function(e){
+            e.stopPropagation();
+        },
+        //被保人手机
+        onBlurPolicyholderedPhone: function(e){
+            e.stopPropagation();
+            var phone = e.target.value;
+            if(!phone){
+                this.policyholdered.phone = null;
+                return;
+            }
+            if(utils.testPhone(phone)){
+                console.log("手机号合法");
+                this.policyholdered.phone = phone;
+            }else{
+                alert("手机号码不正确");
+                console.log("手机号码不正确");
+                this.policyholdered.phone = null;
+            }
+        },
+        //被保人身份证
+        onBlurPolicyholderedId: function(e){
+            e.stopPropagation(e);
+            var cardId = e.target.value;
+            if(!cardId){
+                this.policyholdered.cardId = null;
+                return;
+            }
+            if(utils.IdentityCodeValid(cardId)){
+                console.log("身份证合法");
+                this.policyholdered.cardId = cardId;
+            }else{
+                alert("身份证号码不正确");
+                console.log("身份证号码不正确");
+                this.policyholdered.cardId = null;
+            }
+        },
+        //被保人姓名
+        onBlurPolicyholderedName: function(e){
+            e.stopPropagation();
+            var name = e.target.value;
+            if(!name){
+                this.policyholdered.name = null;
+                return;
+            }
+            this.policyholdered.name = name;
+        },
+
+        //改变了与投保人关系
+        onChangePolicyholderedRelation: function(e){
+            e.stopPropagation();
+// this.ui.policyholderedName.attr("readonly", "readonly");
+// this.ui.policyholderedName.removeAttr("readonly");
+            // console.log(this.policyholder);
+            // console.log(this.ui.policyholderedRelation[0].value);
+            if(this.policyholderDone()){
+                if(this.ui.policyholderedRelation[0].value == "1"){
+                    this.ui.policyholderedName.val(this.policyholder.name);
+                    this.ui.policyholderedName.attr("readonly", "readonly");
+                    this.policyholdered.name = this.policyholder.name;
+                    this.ui.policyholderedPhone.val(this.policyholder.phone);
+                    this.ui.policyholderedPhone.attr("readonly", "readonly");
+                    this.policyholdered.phone = this.policyholder.phone;
+                    this.ui.policyholderedId.val(this.policyholder.cardId);
+                    this.ui.policyholderedId.attr("readonly", "readonly");
+                    this.policyholdered.cardId = this.policyholder.cardId;
+
+                }else{
+                    this.ui.policyholderedName.removeAttr("readonly");
+                    this.ui.policyholderedPhone.removeAttr("readonly");
+                    this.ui.policyholderedId.removeAttr("readonly");
+                }
+
+
+                this.policyholdered.relation = this.ui.policyholderedRelation[0].value;
+
+            }else{
+                console.log("投保人信息不正确");
+            }
+            // console.log("lllll");
+        },
+
+        policyholderDone: function(){
+            if(!this.policyholder.name){
+                alert("投保人姓名不正确");
+                return false;
+            }
+            if(!this.policyholder.phone){
+                alert("投保人手机号码不正确");
+                return false;
+            }
+            if(!this.policyholder.email){
+                alert("投保人邮箱不正确");
+                return false;
+            }
+            if(!this.policyholder.cardId){
+                alert("投保人身份证号码不正确");
+                return false;
+            }
+            return true;
+        },
+
+        //身份证失去焦点
+        onBlurPolicyholderId: function(e){
+            e.stopPropagation(e);
+            var cardId = e.target.value;
+            if(!cardId){
+                this.policyholder.cardId = null;
+                return;
+            }
+            if(utils.IdentityCodeValid(cardId)){
+                console.log("身份证号码合法");
+                this.policyholder.cardId = cardId;
+            }else{
+                alert("身份证号码不正确a");
+                console.log("身份证号码不正确");
+                this.policyholder.cardId = null;
+            }
+        },
+        //邮箱失去焦点
+        onBlurPolicyholderEmail: function(e){
+            var email = e.target.value;
+            if(!email){
+                this.policyholder.email = null;
+                return;
+            }
+            if(utils.testEmail(email)){
+                console.log("邮箱合法");
+                this.policyholder.email = email;
+            }else{
+                alert("邮箱不正确a");
+                console.log("邮箱不正确a");
+                this.policyholder.email = null;
+            }
+        },
+        //手机号码失去焦点
+        onBlurPolicyholderPhone: function(e){
+            e.stopPropagation();
+            var phone = e.target.value;
+            if(!phone){
+                this.policyholder.phone = null;
+                return;
+            }
+            if(utils.testPhone(phone)){
+                this.policyholder.phone = phone;
+                console.log("手机号合法")
+            }else{
+                alert("手机号码不正确a");
+                console.log("手机号码不正确a");
+                this.policyholder.phone = null;
+            }
+            // console.log(e.target.value);
+        },
+        //姓名失去焦点
+        onBlurPolicyholderName: function(e){
+            e.stopPropagation(e);
+            var name = e.target.value;
+            console.log(name);
+            if(!name){
+                this.policyholder.name = null;
+                return;
+            }
+            this.policyholder.name = name;
         },
         //事件添加
         onClickProductTextNav: function(e){
@@ -45,7 +271,6 @@ define([
             var targetObj = $(e.target);
             var targetParent = targetObj.parent();
             var targetObjId = targetObj.attr("id");
-            // console.log(targetParent);
             for(var i=0; i<targetParent.children().length; i++){
                 $(targetParent.children()[i]).removeClass("puoduct-text-item-select");
             }
@@ -68,42 +293,35 @@ define([
             }
         },
         onChangEnsurePlan: function(e){
-            // e.preventDefault();
-            // console.log(".,,,,,,");
             e.stopPropagation();
-            // console.log(this.ui.ensurePlan.find("option:selected").text());
-
-            // if(this.ui.ensurePlan[0])
             this.ui.dutyTitleRight.html(this.ui.ensurePlan.find("option:selected").text());
+
+            this.policyholdered.ensurePlan = this.ui.ensurePlan[0].value;
+            // console.log(this.policyholdered);
+
             this.ui.dutyNum1.html(10*this.ui.ensurePlan[0].value);
             this.ui.dutyNum2.html(100*this.ui.ensurePlan[0].value);
             this.ui.dutyNum3.html(100*this.ui.ensurePlan[0].value);
         },
         onChangeHasSocialSecurity: function(e){
             e.stopPropagation();
-            console.log(this.ui.hasSocialSecurity[0].value);
+            // console.log(this.ui.hasSocialSecurity[0].value);
+            this.policyholdered.hasSocialSecurity = this.ui.hasSocialSecurity[0].value;
         },
         onchangeEnsureAge: function(e){
             e.stopPropagation();
-            console.log(this.ui.ensureAge[0].value);
+            var ensureAge = JSON.parse(this.ui.ensureAge[0].value);
+            this.policyholdered.maxAge = ensureAge.maxAge;
+            this.policyholdered.minAge = ensureAge.minAge;
+            this.policyholdered.minDay = ensureAge.minday;
         },
         onClickProductBuy: function(e){
             e.stopPropagation();
-            // window.open("#")
-            // app.navigate("product-policyholder")
-            // window.open("#product-policyholder");
-            // app.navigate("product-policyholder", {replace: true, trigger: true});
 
             this.ui.productDetail.scrollTop(this.ui.productPolicyholder[0].offsetTop-88);
-            // console.log(this.ui.productPolicyholder[0].offsetTop);
         },
-        events : {
-            "tap @ui.productTextNav": "onClickProductTextNav",  
-            "change @ui.ensurePlan": "onChangEnsurePlan", 
-            "change @ui.hasSocialSecurity": "onChangeHasSocialSecurity",
-            "change @ui.ensureAge": "onchangeEnsureAge",
-            "tap @ui.productBuy": "onClickProductBuy"
-        },
+        
+
         /**初始化**/
         initialize : function(){
 

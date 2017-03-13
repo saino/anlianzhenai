@@ -79,17 +79,17 @@
 				</div>
 				<div class="main_list_new_right">
 					<select id="ensureAge">
-						<option value="{minAge:16,maxAge:20,minday:null}">16周岁-20周岁</option>
-						<option value="{minAge:null,maxAge:5,minday:30}">30天-5周岁</option>				    
-						<option value="{minAge:6,maxAge:10,minday:null}">6周岁-10周岁</option>
-						<option value="{minAge:11,maxAge:15,minday:null}">11周岁-15周岁</option>
-						<option value="{minAge:21,maxAge:25,minday:null}">21周岁-25周岁</option>
-						<option value="{minAge:26,maxAge:30,minday:null}">26周岁-30周岁</option>
-						<option value="{minAge:31,maxAge:35,minday:null}">31周岁-35周岁</option>
-						<option value="{minAge:36,maxAge:40,minday:null}">36周岁-40周岁</option>
-						<option value="{minAge:41,maxAge:45,minday:null}">41周岁-45周岁</option>
-						<option value="{minAge:46,maxAge:2500,minday:null}">46周岁-50周岁</option>
-						<option value="{minAge:51,maxAge:55,minday:null}">51周岁-55周岁</option>
+						<option value='{"minAge":16,"maxAge":20,"minday":null}'>16周岁-20周岁</option>
+						<option value='{"minAge":null,"maxAge":5,"minday":30}'>30天-5周岁</option>				    
+						<option value='{"minAge":6,"maxAge":10,"minday":null}'>6周岁-10周岁</option>
+						<option value='{"minAge":11,"maxAge":15,"minday":null}'>11周岁-15周岁</option>
+						<option value='{"minAge":21,"maxAge":25,"minday":null}'>21周岁-25周岁</option>
+						<option value='{"minAge":26,"maxAge":30,"minday":null}'>26周岁-30周岁</option>
+						<option value='{"minAge":31,"maxAge":35,"minday":null}'>31周岁-35周岁</option>
+						<option value='{"minAge":36,"maxAge":40,"minday":null}'>36周岁-40周岁</option>
+						<option value='{"minAge":41,"maxAge":45,"minday":null}'>41周岁-45周岁</option>
+						<option value='{"minAge":46,"maxAge":50,"minday":null}'>46周岁-50周岁</option>
+						<option value='{"minAge":51,"maxAge":55,"minday":null}'>51周岁-55周岁</option>
 					</select>
 					<img src="./images/111_03.png" class="main_list_new_right_img">
 				</div>
@@ -150,19 +150,19 @@
 			</div>
 			<div class="detail-item">
 				<div class="detail-item-text">姓名:</div>
-				<input class="detail-item-input" placeholder="请输入您的姓名"/>
+				<input id="policyholder-name" class="detail-item-input" placeholder="请输入您的姓名"/>
 			</div>
 			<div class="detail-item">
 				<div class="detail-item-text">手机:</div>
-				<input class="detail-item-input" placeholder="请输入您的手机号"/>
+				<input id="policyholder-phone" class="detail-item-input" placeholder="请输入您的手机号"/>
 			</div>
 			<div class="detail-item">
 				<div class="detail-item-text">邮箱:</div>
-				<input class="detail-item-input" placeholder="Mailbox"/>
+				<input id="policyholder-email"class="detail-item-input" placeholder="Mailbox"/>
 			</div>
 			<div class="detail-item">
 				<div class="detail-item-text">身份证:</div>
-				<input class="detail-item-input" placeholder="请输入您的证件号码"/>
+				<input id="policyholder-id" class="detail-item-input" placeholder="请输入您的证件号码"/>
 			</div>
 		</div>
 
@@ -171,66 +171,48 @@
 		<div class="product-policyholder-detail">
 			<div class="detail-item">
 				<div class="detail-item-text">与投保人关系:</div>
-				<select class="detail-item-input">
-					<option>请选择</option>
-					<option>本人</option>
-					<option>父亲</option>
-					<option>母亲</option>
-					<option>妻子</option>
-					<option>丈夫</option>
-					<option>儿子</option>
-					<option>女儿</option>
+				<select id="policyholdered-relation" class="detail-item-input">
+					<option value="0">请选择</option>
+					<option value="1">本人</option>
+					<option value="2">父亲</option>
+					<option value="3">母亲</option>
+					<option value="4">妻子</option>
+					<option value="5">丈夫</option>
+					<option value="6">儿子</option>
+					<option value="7">女儿</option>
 				</select>
 			</div>
 			<div class="detail-item">
 				<div class="detail-item-text">姓名:</div>
-				<input class="detail-item-input" placeholder="请输入姓名"/>
+				<input id="policyholdered-name" class="detail-item-input" placeholder="请输入姓名"/>
 			</div>
 			<div class="detail-item">
 				<div class="detail-item-text">身份证:</div>
-				<input class="detail-item-input" placeholder="请输入证件号码"/>
+				<input id="policyholdered-id" class="detail-item-input" placeholder="请输入证件号码"/>
 			</div>
 			<div class="detail-item">
 				<div class="detail-item-text">手机:</div>
-				<input class="detail-item-input" placeholder="请输入手机号"/>
+				<input id="policyholdered-phone" class="detail-item-input" placeholder="请输入手机号"/>
 			</div>
 			<div class="detail-item">
 				<div class="detail-item-text">一级职业:</div>
-				<select class="detail-item-input">
+				<select id="policyholdered-work-1" class="detail-item-input">
 					<option>请选择</option>
-				<!-- 	<option>本人</option>
-					<option>父亲</option>
-					<option>母亲</option>
-					<option>妻子</option>
-					<option>丈夫</option>
-					<option>儿子</option>
-					<option>女儿</option> -->
+			
 				</select>
 			</div>
 			<div class="detail-item">
 				<div class="detail-item-text">二级职业:</div>
-				<select class="detail-item-input">
+				<select id="policyholdered-work-2" class="detail-item-input">
 					<option>请选择</option>
-				<!-- 	<option>本人</option>
-					<option>父亲</option>
-					<option>母亲</option>
-					<option>妻子</option>
-					<option>丈夫</option>
-					<option>儿子</option>
-					<option>女儿</option> -->
+			
 				</select>
 			</div>
 			<div class="detail-item">
 				<div class="detail-item-text">三级职业:</div>
-				<select class="detail-item-input">
+				<select id="policyholdered-work-3" class="detail-item-input">
 					<option>请选择</option>
-			<!-- 		<option>本人</option>
-					<option>父亲</option>
-					<option>母亲</option>
-					<option>妻子</option>
-					<option>丈夫</option>
-					<option>儿子</option>
-					<option>女儿</option> -->
+	
 				</select>
 			</div>
 			

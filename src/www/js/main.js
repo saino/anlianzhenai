@@ -152,7 +152,8 @@ require.config({
         msgbox : "common/views/MsgBox",
         touch : "lib/touch-0.2.14.min",
         device : "lib/device",
-        pageSwitch:"lib/pageSwitch"
+        pageSwitch:"lib/pageSwitch",
+        json: "lib/json2"
 	},
     waitSeconds: 0
 });

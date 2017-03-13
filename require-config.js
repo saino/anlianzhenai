@@ -72,6 +72,7 @@ var requirejs={
         dropload: 'lib/dropload',
         move : "lib/move",
         pageSwitch : 'lib/pageSwitch',
+        json: 'lib/json2',
         swipejs : 'lib/swipe-new',
         device : "lib/device",
         swiper3d : "lib/swiper",
