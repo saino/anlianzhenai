@@ -5,7 +5,8 @@ define([
     'common/base/base_view',
     'text!module/home/templates/home.html',
     'marionette',
-],function(BaseView, homeTPL, mn) {
+    'module/home/model/homeModel'
+],function(BaseView, homeTPL, mn, homeModel) {
     return BaseView.extend({
         id : "home",
 
@@ -22,6 +23,9 @@ define([
         changjianwenti: '<p style="white-space: normal;"><strong>Q1:臻爱医疗的续保流程是怎样的？</strong></p><p style="white-space: normal;">A1:本合同期满，投保人可向保险人申请连续投保本合同，续保没有等待期，不需要重新填写健康告知。本合同为非保证续保合同，投保人连续投保本合同须经保险人审核同意。续保时保险人有权根据医疗费 用水平变化、本险种整体经营状况及被保险人年龄对费率等进行调整。在投保人接受费率等调整的前提下，保险人方可为投保人办理连续投保手续。</p><p style="white-space: normal;">对于符合续保条件的客户，我们也会按正常的续保流程，每月发送续保通知书/续保清单给到渠道。</p><p style="white-space: normal;"><br></p><p style="white-space: normal;"><strong>Q2：如续保通知书发送后，客户才检查出恶性肿瘤疾病，是否能继续承保？</strong></p><p style="white-space: normal;">A2：自本续保通知书发出日至续保保单生效日期间，若被保险人的风险状况改变，投保人/ 保险人应及时通知，保险公司有权修改续保条件/价格或撤销本续保通知书。</p><p style="white-space: normal;"><br></p><p style="white-space: normal;"><strong>Q3：如保单即将到期时确诊，住院产生医疗费用，那么跨保险年度住院是否赔付医疗费用？</strong></p><p style="white-space: normal;">A3：关于被保险人跨保险年度住院所产生的医疗费用属于保险责任范围内的，我司将按保险条款约定执行如下：</p><p style="white-space: normal;">1. 如被保险人正常续保或条件续保，其在保单终保时间前产生的住院医疗费用按当年度保单保险责任予以给付；其在保单终保时间后产生的住院医疗费用按续保年度保单保险责任予以给付。</p><p style="white-space: normal;">2．如被保险人不能续保，对于其住院产生的医疗费用属于保险责任范围内的，依照当年度保单保险条款约定予以给付。</p><p style="white-space: normal;"><br></p><p style="white-space: normal;"><strong>Q4:如果客户有社保，以有社保身份购买这个产品，但是实际就医过程中并没有使用社保，如何理赔？</strong></p><p style="white-space: normal;">A4:若被保险人以有社会医疗保险身份投保，但未以社会医疗保险身份就诊并结算的，本保险按照应赔付金额的60%进行赔付。举个栗子：</p><p style="white-space: normal;">小安有社保，在**人寿和安联财险分别有住院保险。某次住院及特殊门诊花费合理费用5.6万，其中由于异地就医并没有使用社保，**人寿报销0.8万，小安可到安联报销以下金额：[5.6-0.8-(1-0.8)]*0.6=2.76万，按赔付金额的60%进行赔付。本次医疗费用，小安自付部分为：5.6-0.8-2.76=2.04万</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><strong>Q5:如果客户投保时无社保，投保了无社保的臻爱计划，但是半年后客户需要理赔的时候已经有社保，是否可以直接提交理赔而不通过社保？</strong></p><p style="white-space: normal;">A5：理赔时客户如果已有参保，即使购买的无社保计划，仍然需要按照实际情况先申报社保。如果没有经过社保，那么会按60%的赔付处理。</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><strong>Q6: 如果客户是无社保的，2个月后才会购买社保，是否可以买有社保的计划？</strong></p><p style="white-space: normal;">A6：如现在投保就购买无社保的计划，或者2个月之后有社保之后再购买有社保的计划。</p><p style="white-space: normal;">&nbsp;</p><p style="white-space: normal;"><strong>Q7:如果客户是无社保的，但是购买了有社保的计划，已经过了30日的疾病等待期，等待期内没有任何理赔事项。</strong></p><p style="white-space: normal;">A7:建议客户退保（按未满期净保费折算），重新购买无社保的计划,疾病住院或特殊门诊仍有30天等待期。</p><p><br></p>',
 
         money: 152,
+        job1: [],
+        job2: [],
+        job3: [],
         //投保人信息验证
         policyholder:{
             name: null,
@@ -78,7 +82,7 @@ define([
             toBuy: "#to-buy",      //确定购买
 
         },
-         events : {
+        events : {
             "tap @ui.healthTell1": "onclickHealthTell1",
 
             "tap @ui.productTextNav": "onClickProductTextNav",  
@@ -568,7 +572,21 @@ define([
             if(this.policyholdered.work2=="0"){
                 this.ui.policyholderedWork3[0].value = "0";
                 this.policyholdered.work3 = "0";
+                this.job3 = [];
             }
+            for(var i=0; i<this.job2.length; i++){
+                if(this.job2[i].jobcode == this.policyholdered.work2){
+                    this.job3 = this.job2[i].childJobs;
+                    break;
+                }else{
+                    this.job3 = [];
+                }
+            }
+            var job3Html = '<option value="0">请选择</option>';
+            for(var j=0; j<this.job3.length; j++){
+                job3Html += '<option value="'+this.job3[j].jobcode+'">'+this.job3[j].jobName1||this.job3[j].jobName2+'</option>';
+            }
+            this.ui.policyholderedWork3.html(job3Html);
         },
         onClickPolicyholderedWork2: function(e){
             e.stopPropagation();
@@ -584,9 +602,26 @@ define([
             if(this.policyholdered.work1=="0"){
                 this.ui.policyholderedWork2[0].value = "0";
                 this.policyholdered.work2 = "0";
+                this.job2 = [];
                 this.ui.policyholderedWork3[0].value = "0";
                 this.policyholdered.work3 = "0";
+                this.job3 = [];
             }
+            for(var i=0; i<this.job1.length; i++){
+                if(this.job1[i].jobcode == this.policyholdered.work1){
+                    this.job2 = this.job1[i].childJobs;
+
+                    break;
+                }else{
+                    this.job2 = [];
+                }
+            }
+            var job2Html = '<option value="0">请选择</option>';
+            for(var j=0; j<this.job2.length; j++){
+                job2Html += '<option value="'+this.job2[j].jobcode+'">'+this.job2[j].jobName1||this.job2[j].jobName2+'</option>';
+            }
+            this.ui.policyholderedWork2.html(job2Html);
+
         },
         //被保人手机
         onBlurPolicyholderedPhone: function(e){
@@ -825,6 +860,116 @@ define([
         },
         show : function(){
 
+            homeModel.getWork(function(data){
+                console.log(data,"请求职业数据成功");
+                if(data.status == "0"){
+                    this.job1 = data.jobCategorys;
+                    var job1Html = '<option value="0">请选择</option>';
+                    for(var i=0; i<this.job1.length;i++){
+                        job1Html += '<option value="'+this.job1[i].jobcode+'">'+this.job1[i].jobName1+'</option>';
+                    }
+                    this.ui.policyholderedWork1.html(job1Html);
+                }else{
+                    console.log("请求成功，但服务器返回数据错误");
+                }
+            },function(erro){
+                console.log(erro,"请求职业数据失败");
+            });
+        var search = window.location.search;
+        if(search.indexOf("?")>=0){
+            var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ utils.config.wxappid +'&redirect_uri='+ encodeURIComponent(window.location.href) +'&response_type=code&scope=snsapi_base#wechat_redirect';
+            window.location.href = url;
+        }else{
+            
+        }
+        // window.location.href = url;
+
+            // data={
+            //     status: 0,
+            //     errorMessages: null,
+            //     jobCategorys:[
+            //         {
+            //             jobId: 9,
+            //             jobcode: "B001",
+            //             jobClassId: 1,
+            //             jobName1: "玻璃制造业",
+            //             jobName2: null,
+            //             parentJobCode: null,
+            //             isSpecial: "N",
+            //             childJobs:[
+            //                 {
+            //                     jobId: 16,
+            //                     jobcode: "B001001",
+            //                     jobClassId: 1,
+            //                     jobName1: "技师",
+            //                     jobName2: null,
+            //                     parentJobCode: "B001",
+            //                     isSpecial: "N",
+            //                     childJobs:[
+            //                         {
+            //                             jobId: 26,
+            //                             jobcode: "B001001001",
+            //                             jobClassId: 1,
+            //                             jobName1: "切割技师",
+            //                             jobName2: null,
+            //                             parentJobCode: "B001001",
+            //                             isSpecial: "N",
+            //                             childJobs: []
+            //                         }
+            //                     ]
+            //                 }
+            //             ]
+            //         },
+            //         {
+            //             jobId: 9,
+            //             jobcode: "B002",
+            //             jobClassId: 1,
+            //             jobName1: "玻璃制造业2",
+            //             jobName2: null,
+            //             parentJobCode: null,
+            //             isSpecial: "N",
+            //             childJobs:[
+            //                 {
+            //                     jobId: 16,
+            //                     jobcode: "B002002",
+            //                     jobClassId: 1,
+            //                     jobName1: "技师2",
+            //                     jobName2: null,
+            //                     parentJobCode: "B002",
+            //                     isSpecial: "N",
+            //                     childJobs:[
+            //                         {
+            //                             jobId: 26,
+            //                             jobcode: "B002002002",
+            //                             jobClassId: 1,
+            //                             jobName1: "切割技师2",
+            //                             jobName2: null,
+            //                             parentJobCode: "B002002",
+            //                             isSpecial: "N",
+            //                             childJobs: []
+            //                         }
+            //                     ]
+            //                 }
+            //             ]
+            //         }
+            //     ]
+            // };
+
+            // if(data.status == "0"){
+            //     this.job1 = data.jobCategorys;
+            //     var job1Html = '<option value="0">请选择</option>';
+            //     // console.log(job1Html);
+            //     for(var i=0; i<this.job1.length;i++){
+            //         job1Html += '<option value="'+this.job1[i].jobcode+'">'+this.job1[i].jobName1+'</option>';
+            //     }
+                
+
+            //     this.ui.policyholderedWork1.html(job1Html);
+            // }
+
+            // } else{
+            //     console.log("数据有问题");
+            // }
             this.ui.productTextContent.html(this.toubaoxuzhi);
             
         },

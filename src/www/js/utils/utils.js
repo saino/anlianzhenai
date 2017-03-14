@@ -4,6 +4,12 @@
 (function(window){
     var utils = {};
     window.utils = utils;
+
+    utils.config = {
+        url: "",
+        wxappid : "wxd027563f8d67dc76"
+    };
+
     utils.testPhone = function(phone){
         var pass = true;
         var REGX = /^1(3|4|5|6|7|8)\d{9}/;
