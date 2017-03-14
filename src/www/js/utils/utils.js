@@ -16,6 +16,22 @@
         pass = REGX.test(email);
         return pass;
     }
+    utils.getAge = function(birth){
+        var today = new Date();
+        var timer1 = today.getTime();
+        var time2 = new Date(birth);
+        time2 = time2.getTime();
+        return parseInt((timer1 - time2)/1000/3600/24/365);
+    }
+    utils.getBirth = function(str){
+        if(str.length == 18){
+            var birth = str.substr(6,4)+"-"+str.substr(10,2)+"-"+str.substr(12,2);
+            return birth;
+        }else{
+            var birth = '19' + str.substr(6,2)+"-"+str.substr(8,2)+"-"+str.substr(10,2);
+            return birth;
+        }
+    }
 //身份证校验是否合法
     utils.IdentityCodeValid = function(code) {
         var city={11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙古",21:"辽宁",22:"吉林",23:"黑龙江 ",31:"上海",32:"江苏",33:"浙江",34:"安徽",35:"福建",36:"江西",37:"山东",41:"河南",42:"湖北 ",43:"湖南",44:"广东",45:"广西",46:"海南",50:"重庆",51:"四川",52:"贵州",53:"云南",54:"西藏 ",61:"陕西",62:"甘肃",63:"青海",64:"宁夏",65:"新疆",71:"台湾",81:"香港",82:"澳门",91:"国外 "};
@@ -58,15 +74,15 @@
       return pass;
     }
 
-    //通过身份证号获取年龄
-    utils.getAge = function(str){
-      return moment().diff(getBirth(str), 'years');
-    }
+    // //通过身份证号获取年龄
+    // utils.getAge = function(str){
+    //   return moment().diff(getBirth(str), 'years');
+    // }
 
-    //通过身份证号获取生了多少天
-    utils.getDay = function(str){
-      return moment().diff(getBirth(str), 'days');
-    }
+    // //通过身份证号获取生了多少天
+    // utils.getDay = function(str){
+    //   return moment().diff(getBirth(str), 'days');
+    // }
 
     //通过身份证号获取生日
     utils.getBirth = function(str){

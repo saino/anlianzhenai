@@ -526,7 +526,22 @@ define([
                 alert("被保人身份证号码不正确");
                 return false;
             }else{
-                console.log("被保人的年龄与您选择的投保方案不符");
+                var policyholderedBirthStr = utils.getBirth(this.policyholdered.cardId);
+                var policyholderBirthStr = utils.getBirth(this.policyholder.cardId);
+                var policyholderedAge = utils.getAge(policyholderedBirthStr);
+                var policyholderAge = utils.getAge(policyholderBirthStr); 
+                if(policyholderedAge<this.policyholdered.minAge || policyholderedAge>this.policyholdered.maxAge){
+                    alert("被保人的年龄与您选择的投保方案不符");
+                    return false;
+                }
+                if((this.policyholdered.relation=="2"||this.policyholdered.relation=="3") && policyholderedAge<=policyholderAge){
+                    alert("被保人与投保人的关系和年龄不相称");
+                    return false;
+                }
+                if((this.policyholdered.relation=="7"||this.policyholdered.relation=="8") && policyholderedAge>=policyholderAge){
+                    alert("被保人与投保人的关系和年龄不相称");
+                    return false;
+                }
             }
             if(!this.policyholdered.phone){
                 alert("被保人手机号码不正确");
@@ -566,6 +581,7 @@ define([
             this.policyholdered.work2 = this.ui.policyholderedWork2[0].value;
             if(this.policyholdered.work2=="0"){
                 this.ui.policyholderedWork3[0].value = "0";
+                this.policyholdered.work3 = "0";
             }
         },
         onClickPolicyholderedWork2: function(e){
@@ -581,7 +597,9 @@ define([
             this.policyholdered.work1 = this.ui.policyholderedWork1[0].value;
             if(this.policyholdered.work1=="0"){
                 this.ui.policyholderedWork2[0].value = "0";
+                this.policyholdered.work2 = "0";
                 this.ui.policyholderedWork3[0].value = "0";
+                this.policyholdered.work3 = "0";
             }
         },
         //被保人手机
@@ -632,6 +650,7 @@ define([
         //改变了与投保人关系
         onChangePolicyholderedRelation: function(e){
             e.stopPropagation();
+            e.preventDefault();
 // this.ui.policyholderedName.attr("readonly", "readonly");
 // this.ui.policyholderedName.removeAttr("readonly");
             // console.log(this.policyholder);
@@ -655,11 +674,12 @@ define([
                 }
 
 
-                this.policyholdered.relation = this.ui.policyholderedRelation[0].value;
+                // this.policyholdered.relation = this.ui.policyholderedRelation[0].value;
 
             }else{
                 console.log("投保人信息不正确");
             }
+            this.policyholdered.relation = this.ui.policyholderedRelation[0].value;
             // console.log("lllll");
         },
 
