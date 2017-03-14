@@ -74,7 +74,6 @@ define([
             policyholderedWork1: "#policyholdered-work-1",        //被保人一级职业
             policyholderedWork2: "#policyholdered-work-2",        //被保人一级职业
             policyholderedWork3: "#policyholdered-work-3",        //被保人一级职业
-            // healthTell1: "input[name=health-tell-1]",        //健康告知一
 
             toBuy: "#to-buy",      //确定购买
 
@@ -427,7 +426,6 @@ define([
                     this.money = 12525             
                 }
             }
-            console.log(("5">=76));
         },
         setSearchCode: function(ensurePlan, hasSocialSecurity){
             if(ensurePlan=="1" && hasSocialSecurity=="has"){
@@ -451,14 +449,13 @@ define([
         },
         onclickHealthTell1: function(e){
             e.stopPropagation();
-            // e.preventDefault();
-            // console.log("......dddd");
-            // console.log(this.ui.healthTell1.)
         },
         onClickTobuy: function(e){
             e.stopPropagation();
             e.preventDefault();
-// console.log($("input[name=health-tell-1]:checked").val()=="yes");
+
+            console.log(this.policyholder,"ffff");
+            console.log(this.policyholdered,"gggggg");
             if(!this.policyholderDone()){
                 return;
             }
@@ -499,19 +496,8 @@ define([
                 alert("您的投保不符合健康条件第八条");
                 return;
             }
-
-            // console.log($("input[name=health-tell-2]:checked").val());
-            // console.log($("input[name=health-tell-3]:checked").val());
-            // console.log($("input[name=health-tell-4]:checked").val());
-            // console.log($("input[name=health-tell-5]:checked").val());
-            // console.log($("input[name=health-tell-6]:checked").val());
-            // console.log($("input[name=health-tell-7]:checked").val());
-            // console.log($("input[name=health-tell-8]:checked").val());
-
-            // console.log("dddddd");
             console.log(this.policyholder);
             console.log(this.policyholdered);
-            // console.log(this.ui.healthTell1);
         },
         policyholderedDone: function(){
             if(this.policyholdered.relation == "0"){
@@ -651,10 +637,6 @@ define([
         onChangePolicyholderedRelation: function(e){
             e.stopPropagation();
             e.preventDefault();
-// this.ui.policyholderedName.attr("readonly", "readonly");
-// this.ui.policyholderedName.removeAttr("readonly");
-            // console.log(this.policyholder);
-            // console.log(this.ui.policyholderedRelation[0].value);
             if(this.policyholderDone()){
                 if(this.ui.policyholderedRelation[0].value == "1"){
                     this.ui.policyholderedName.val(this.policyholder.name);
@@ -673,14 +655,10 @@ define([
                     this.ui.policyholderedId.removeAttr("readonly");
                 }
 
-
-                // this.policyholdered.relation = this.ui.policyholderedRelation[0].value;
-
             }else{
                 console.log("投保人信息不正确");
             }
             this.policyholdered.relation = this.ui.policyholderedRelation[0].value;
-            // console.log("lllll");
         },
 
         policyholderDone: function(){
@@ -798,25 +776,24 @@ define([
             this.ui.dutyTitleRight.html(this.ui.ensurePlan.find("option:selected").text());
 
             this.policyholdered.ensurePlan = this.ui.ensurePlan[0].value;
-            // console.log(this.policyholdered);
 
-            this.ui.dutyNum1.html(10*this.ui.ensurePlan[0].value);
-            this.ui.dutyNum2.html(100*this.ui.ensurePlan[0].value);
-            this.ui.dutyNum3.html(100*this.ui.ensurePlan[0].value);
+            this.ui.dutyNum1.html(10*this.ui.ensurePlan[0].value+"万");
+            this.ui.dutyNum2.html(100*this.ui.ensurePlan[0].value+"万");
+            this.ui.dutyNum3.html(100*this.ui.ensurePlan[0].value+"万");
             this.policyholdered.searchCode = this.setSearchCode(this.policyholdered.ensurePlan,this.policyholdered.hasSocialSecurity);
             this.calMoney(this.policyholdered.minAge, this.policyholdered.maxAge, this.policyholdered.hasSocialSecurity, this.policyholdered.ensurePlan);
-            // console.log(this.money, this.policyholdered);
+
             $(".product-price").html("价格："+this.money+"元");
 
         },
         onChangeHasSocialSecurity: function(e){
             e.stopPropagation();
-            // console.log(this.ui.hasSocialSecurity[0].value);
+
             this.policyholdered.hasSocialSecurity = this.ui.hasSocialSecurity[0].value;
             this.policyholdered.searchCode = this.setSearchCode(this.policyholdered.ensurePlan,this.policyholdered.hasSocialSecurity);
             this.calMoney(this.policyholdered.minAge, this.policyholdered.maxAge, this.policyholdered.hasSocialSecurity, this.policyholdered.ensurePlan);
             $(".product-price").html("价格："+this.money+"元");
-            // console.log(this.money, this.policyholdered);
+
         },
         onchangeEnsureAge: function(e){
             e.stopPropagation();
@@ -825,7 +802,7 @@ define([
             this.policyholdered.minAge = ensureAge.minAge;
             this.policyholdered.minDay = ensureAge.minday;
             this.calMoney(this.policyholdered.minAge, this.policyholdered.maxAge, this.policyholdered.hasSocialSecurity, this.policyholdered.ensurePlan);
-            // console.log(this.money, this.policyholdered);
+
             $(".product-price").html("价格："+this.money+"元");
         },
         onClickProductBuy: function(e){

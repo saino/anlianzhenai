@@ -1,5 +1,5 @@
 // 文件名称: utils.js
-// 创 建 人: guyy
+// 创 建 人: saino.liu
 // 描    述: 工具类
 (function(window){
     var utils = {};
@@ -74,15 +74,7 @@
       return pass;
     }
 
-    // //通过身份证号获取年龄
-    // utils.getAge = function(str){
-    //   return moment().diff(getBirth(str), 'years');
-    // }
 
-    // //通过身份证号获取生了多少天
-    // utils.getDay = function(str){
-    //   return moment().diff(getBirth(str), 'days');
-    // }
 
     //通过身份证号获取生日
     utils.getBirth = function(str){
