@@ -875,14 +875,29 @@ define([
             },function(erro){
                 console.log(erro,"请求职业数据失败");
             });
-        var search = window.location.search;
-        if(search.indexOf("?")>=0){
-            var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ utils.config.wxappid +'&redirect_uri='+ encodeURIComponent(window.location.href) +'&response_type=code&scope=snsapi_base#wechat_redirect';
-            window.location.href = url;
-        }else{
-            
-        }
+            var openId = window.sessionStorage.openId;
+            if(!openId){
+                var search = window.location.search;
+                if(search.indexOf("?")>=0){
+                    var paramsObj = {};
+                    var params = search.substr(1).split("&");
+                    for(var i=0; i<params.length; i++){
+                        var paramName = params[i].split("=")[0];
+                        var paramValue = params[i].split("=")[1];
+                        paramsObj[paramName] = paramValue;
+                    }
+                    console.log(paramsObj);
+                    console.log("此时应调用java接口将code:'"+paramsObj.code+"'的内容发送过去");
+                    window.sessionStorage.code = params.code;
+                    window.sessionStorage.openId="xxxfff";
+                }else{
+                    var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ utils.config.wxappid +'&redirect_uri='+ encodeURIComponent(window.location.href) +'&response_type=code&scope=snsapi_base#wechat_redirect';
+                    window.location.href = url;
+                }
+            }
+           
         // window.location.href = url;
+
 
             // data={
             //     status: 0,

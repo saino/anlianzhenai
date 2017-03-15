@@ -3,7 +3,6 @@ define([
 ], function(homeView){
     return {
         home: function(){
-            console.log("hhhhh");
             app.page.show(homeView);
         }
     };

@@ -16,6 +16,8 @@ define([
         appRoutes: {
 
             "": "home",
+            "order": "order",   //订单
+            "order/detaill/:codeId": "orderDetaill"  // 订单详情
         },
 
         /**未登陆时需要过滤的路由**/
@@ -24,7 +26,7 @@ define([
         },
         /**当前路由，如果调用返回，返回到指定路由**/
         backRoutes: {
-
+                
         }   
     });
 });
