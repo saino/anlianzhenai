@@ -35,7 +35,9 @@ define([
             var target = $(e.target);
             var codeId = this.findCodeId(target);
 
-            if(codeId)console.log("to search ",codeId);
+            if(codeId){
+                app.navigate("order/detaill/"+codeId, {replace: true, trigger: true});
+            }
         },
 
         /**初始化**/

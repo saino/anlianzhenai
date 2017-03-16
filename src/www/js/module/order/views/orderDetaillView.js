@@ -13,14 +13,36 @@ define([
 
         template : _.template(tpl),
 
-        _mouseLock : false,
-        _isShow : false,
+        // _mouseLock : false,
+        // _isShow : false,
 
         // key : selector
         ui : {
+            productDetail: ".product-detail",
+            goBack: ".go-back",
         },
         //事件添加
         events : {
+            "tap @ui.productDetail": "onClickProductDetail",
+            "tap @ui.goBack": "onClickGoBack"
+        },
+        onClickGoBack: function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            app.goBack();
+        },
+
+        onClickProductDetail: function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            console.log(e.target);
+            var target = $(e.target);
+            if(target.hasClass("order-msg")){  
+                var targetNextSbiling = target.next();
+                targetNextSbiling. slideToggle();
+                console.log(target, targetNextSbiling);
+            }
+
         },
 
         /**初始化**/

@@ -2,7 +2,7 @@ define([], function(){
 	var homeModel = function(){};
 
 	homeModel.prototype.getWork = function(successCB, errorCB){
-		var url = "http://172.30.7.20:8080/ls/services/md/mdProposalRestService/getJobCategoryList";
+		var url = "http://172.30.2.158:8080/ls/services/md/mdProposalRestService/getJobCategoryList";
 		$.ajax({
 			method: "POST",
 			url: url,

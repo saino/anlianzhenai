@@ -1,5 +1,8 @@
 #home{
 	background-color:#f5f5f5;
+    position: absolute;
+    height: 100%;
+    width: 100%;
 }
 .product{
 	font-family: sans-serif;
@@ -310,4 +313,39 @@
         height: 30px;
         width: 30px;
     }
+}
+.select-buy-way{
+    display: none;
+    position: absolute;
+    background: rgba(0,0,0,0.2);
+    height: 100%;
+    width: 100%;
+    top: 0;
+}
+.select-buy-warp{ 
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+.select-buy-content,.select-not-buy{
+    background: #fff;
+    width: 80%;
+    text-align: center;
+    border-radius:30px;
+    margin-bottom: 16px;
+}
+.select-to-buy,.select-not-buy{
+    color: blue;
+    height: 120px;
+    line-height: 120px;
+    font-size: 4.0em;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+
+}
+.select-way-title{
+    color:#333;
+    font-size: 2.8em;
+    height:100px;
+    line-height:100px;
 }

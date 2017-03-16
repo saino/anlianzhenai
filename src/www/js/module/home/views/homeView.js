@@ -80,6 +80,7 @@ define([
             policyholderedWork3: "#policyholdered-work-3",        //被保人一级职业
 
             toBuy: "#to-buy",      //确定购买
+            selectBuyWay: ".select-buy-way",  //购买方式
 
         },
         events : {
@@ -107,6 +108,24 @@ define([
             "change @ui.policyholderedWork3": "onChangePolicyholderedWork3",
             //确定购买
             "tap @ui.toBuy": "onClickTobuy",
+            "tap @ui.selectBuyWay": "onClickSelectBuyWay",  
+
+        },
+        onClickSelectBuyWay: function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var target = $(e.target);
+            if(target.hasClass("buy-zhifubao")){
+                console.log("支付宝购买");
+            }
+            else if(target.hasClass("buy-weixin")){
+                console.log("微信购买");
+            }
+            else {
+                console.log("取消购买");
+            }
+            this.ui.selectBuyWay.fadeOut();
+
 
         },
         calMoney: function(minAge, maxAge, hasSocialSecurity, ensurePlan){
@@ -457,9 +476,9 @@ define([
         onClickTobuy: function(e){
             e.stopPropagation();
             e.preventDefault();
-
-            console.log(this.policyholder,"ffff");
-            console.log(this.policyholdered,"gggggg");
+            // this.ui.selectBuyWay.fadeIn();
+            // console.log(this.policyholder,"ffff");
+            // console.log(this.policyholdered,"gggggg");
             if(!this.policyholderDone()){
                 return;
             }
@@ -500,6 +519,7 @@ define([
                 alert("您的投保不符合健康条件第八条");
                 return;
             }
+            this.ui.selectBuyWay.fadeIn();
             console.log(this.policyholder);
             console.log(this.policyholdered);
         },
