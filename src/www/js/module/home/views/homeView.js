@@ -26,12 +26,16 @@ define([
         job1: [],
         job2: [],
         job3: [],
+        orderOptions:{
+
+        },
         //投保人信息验证
         policyholder:{
             name: null,
             phone: null,
             email: null,
-            cardId: null
+            cardId: null,
+            birthDate: null,
         },
         //被保人信息验证
         policyholdered:{
@@ -48,6 +52,10 @@ define([
             minDay: null,
             ensurePlan: 1,
             searchCode: "ZAAMIPS(SI)",
+            jobClassId: "1",
+            birthDate: null,
+            gender: null,
+            insuredType: "24",
         },
 
 
@@ -519,9 +527,202 @@ define([
                 alert("您的投保不符合健康条件第八条");
                 return;
             }
-            this.ui.selectBuyWay.fadeIn();
-            console.log(this.policyholder);
-            console.log(this.policyholdered);
+            var self = this;
+            var options = {
+                mobile: self.policyholdered.phone
+            };
+            homeModel.checkPhone(options, 
+                function(data){
+                    console.log("手机检测返回数据为：", data);
+                    if(data.status == "0" && data.check){
+                        self.orderOptions = {
+                            "proposalId" : null,              //订单id                   
+                            "planCode" : self.policyholdered.searchCode,        //六个之一
+                            "policyCode" : null,
+                            "proposalCode" : null,            
+                            "printNo" : null,                                                
+                            "status" : null,                        
+                            "generatedDate" : null,
+                            "effectiveDate" : null,
+                            "expireDate" : null,
+                            "policy" : {
+                                "agencyPolicyRef" :null,    //第三方渠道公司保单号码或者第三方渠道公司订单号码
+                                "planCode" : self.policyholdered.searchCode,                          // 六个之一
+                                "issueDate" :null,               // 出单日期
+                                "effectiveDate" :null,           // 保单生效日期
+                                "expireDate": null,              //保单结束日期
+                                "groupSize" : "1"                            //  被保险人总个数（固定值1）
+                            },
+                            "agency" : {
+                                "agencyCode" : utils.config.agencyCode                          // 安联渠道代码（固定值）
+                            },                                                    
+                            "policyHolder" : {                                 //   投保人对象
+                                "policyHolderType" : "I",//投保人类型（固定值I）（（I-个人(Individual) C-企业或者机构）
+                                "policyHolderName" : self.policyholder.name,//投保人名称
+                                "phIdType" : "1",                   //证件类型（固定值1）
+                                "phIdNumber" : self.policyholder.cardId,      //证件号码
+                                "phBirthDate" : self.policyholder.birthDate,
+                                "phTelephone" : self.policyholder.phone,
+                                "phAddress" : null,
+                                "phPostCode" : null,
+                                "phEmail" : self.policyholder.email,
+                                "reqFaPiao" : "0",    // 是否打印发票（固定0）（1-需要 0-不需要）
+                                "reqMail" : "0",       //是否邮寄发票（固定0）（1-需要 0-不需要）
+                                "invoiceTitle" : null //  发票抬头
+                            },
+                            "insuredList" : [ {   //被保人集合
+                                "insuredId" : null,    //被保险人唯一Id
+                                "insuredType" : self.policyholdered.insuredType,  //被保险人类型(见接口文档1.5.1.4 被保险人清单中insuredType)
+                                "insuredName" : self.policyholdered.name,
+                                "idType" : "1", //身份证
+                                "idNumber" : self.policyholdered.cardId,
+                                "birthDate" : self.policyholdered.birthDate,
+                                "mobile" : self.policyholdered.phone,
+                                "email" : null,
+                                "gender" : self.policyholdered.gender,
+                                "beneficialType" : "1",  //受益类型（固定值1）（1-法定2-顺位3-均分4-比例）
+                                "occupationCode" : self.policyholdered.work3,//被保险人职业代码
+                                "policyholderInsuredRelation" : self.policyholdered.relation //与投保人关系（01-本人02-父母03-子女04-配偶05-其他亲属07-其他）
+                            } ],
+                            "totalPremium" :  self.money //总保费
+                        };
+                        homeModel.toBuyProduct(self.options, function(data){
+                            console.log("可以选择购买", data);
+                            self.ui.selectBuyWay.fadeIn();
+                        }, function(error){
+                            console.log("无法购买", error);
+                        });
+                        // self.ui.selectBuyWay.fadeIn();
+                        console.log("手机号码可用", self.orderOptions,"ddddddddddd");
+                    }else if(data.status=="0" && !data.check){
+                        alert("同一被保人手机号限保五单");
+                    }else{
+                        alert("服务错误");
+                    }
+                    // console.log(self.policyholder);
+                    // console.log(self.policyholdered);
+
+                    // self.orderOptions = {
+                    //         "proposalId" : null,              //订单id                   
+                    //         "planCode" : self.policyholdered.searchCode,        //六个之一
+                    //         "policyCode" : null,
+                    //         "proposalCode" : null,            
+                    //         "printNo" : null,                                                
+                    //         "status" : null,                        
+                    //         "generatedDate" : null,
+                    //         "effectiveDate" : null,
+                    //         "expireDate" : null,
+                    //         "policy" : {
+                    //             "agencyPolicyRef" :null,    //第三方渠道公司保单号码或者第三方渠道公司订单号码
+                    //             "planCode" : self.policyholdered.searchCode,                          // 六个之一
+                    //             "issueDate" :null,               // 出单日期
+                    //             "effectiveDate" :null,           // 保单生效日期
+                    //             "expireDate": null,              //保单结束日期
+                    //             "groupSize" : "1"                            //  被保险人总个数（固定值1）
+                    //         },
+                    //         "agency" : {
+                    //             "agencyCode" : utils.config.agencyCode                          // 安联渠道代码（固定值）
+                    //         },                                                    
+                    //         "policyHolder" : {                                 //   投保人对象
+                    //             "policyHolderType" : "I",//投保人类型（固定值I）（（I-个人(Individual) C-企业或者机构）
+                    //             "policyHolderName" : self.policyholder.name,//投保人名称
+                    //             "phIdType" : "1",                   //证件类型（固定值1）
+                    //             "phIdNumber" : self.policyholder.cardId,      //证件号码
+                    //             "phBirthDate" : thselfis.policyholder.birthDate,
+                    //             "phTelephone" : self.policyholder.phone,
+                    //             "phAddress" : null,
+                    //             "phPostCode" : null,
+                    //             "phEmail" : self.policyholder.email,
+                    //             "reqFaPiao" : "0",    // 是否打印发票（固定0）（1-需要 0-不需要）
+                    //             "reqMail" : "0",       //是否邮寄发票（固定0）（1-需要 0-不需要）
+                    //             "invoiceTitle" : null //  发票抬头
+                    //         },
+                    //         "insuredList" : [ {   //被保人集合
+                    //             "insuredId" : null,    //被保险人唯一Id
+                    //             "insuredType" : self.policyholdered.insuredType,  //被保险人类型(见接口文档1.5.1.4 被保险人清单中insuredType)
+                    //             "insuredName" : self.policyholdered.name,
+                    //             "idType" : "1", //身份证
+                    //             "idNumber" : sef.policyholdered.cardId,
+                    //             "birthDate" : self.policyholdered.birthDate,
+                    //             "mobile" : self.policyholdered.phone,
+                    //             "email" : null,
+                    //             "gender" : self.policyholdered.gender,
+                    //             "beneficialType" : "1",  //受益类型（固定值1）（1-法定2-顺位3-均分4-比例）
+                    //             "occupationCode" : self.policyholdered.work3,//被保险人职业代码
+                    //             "policyholderInsuredRelation" : self.policyholdered.relation //与投保人关系（01-本人02-父母03-子女04-配偶05-其他亲属07-其他）
+                    //         } ],
+                    //         "totalPremium" :  this.money //总保费
+
+                    // }
+
+                    // console.log(self.orderOptions,"ddddddddddd");
+
+                }, function(erro){
+                    alert("服务错误");
+                    console.log("调用接口检测被保人手机失败");
+                    // self.ui.selectBuyWay.fadeIn();
+                    // console.log(self.policyholder);
+                    // console.log(self.policyholdered);
+                }
+            );
+            // self.ui.selectBuyWay.fadeIn();
+
+            // self.orderOptions = {
+            //                 "proposalId" : null,              //订单id                   
+            //                 "planCode" : self.policyholdered.searchCode,        //六个之一
+            //                 "policyCode" : null,
+            //                 "proposalCode" : null,            
+            //                 "printNo" : null,                                                
+            //                 "status" : null,                        
+            //                 "generatedDate" : null,
+            //                 "effectiveDate" : null,
+            //                 "expireDate" : null,
+            //                 "policy" : {
+            //                     "agencyPolicyRef" :null,    //第三方渠道公司保单号码或者第三方渠道公司订单号码
+            //                     "planCode" : self.policyholdered.searchCode,                          // 六个之一
+            //                     "issueDate" :null,               // 出单日期
+            //                     "effectiveDate" :null,           // 保单生效日期
+            //                     "expireDate": null,              //保单结束日期
+            //                     "groupSize" : "1"                            //  被保险人总个数（固定值1）
+            //                 },
+            //                 "agency" : {
+            //                     "agencyCode" : utils.config.agencyCode                          // 安联渠道代码（固定值）
+            //                 },                                                    
+            //                 "policyHolder" : {                                 //   投保人对象
+            //                     "policyHolderType" : "I",//投保人类型（固定值I）（（I-个人(Individual) C-企业或者机构）
+            //                     "policyHolderName" : self.policyholder.name,//投保人名称
+            //                     "phIdType" : "1",                   //证件类型（固定值1）
+            //                     "phIdNumber" : self.policyholder.cardId,      //证件号码
+            //                     "phBirthDate" : self.policyholder.birthDate,
+            //                     "phTelephone" : self.policyholder.phone,
+            //                     "phAddress" : null,
+            //                     "phPostCode" : null,
+            //                     "phEmail" : self.policyholder.email,
+            //                     "reqFaPiao" : "0",    // 是否打印发票（固定0）（1-需要 0-不需要）
+            //                     "reqMail" : "0",       //是否邮寄发票（固定0）（1-需要 0-不需要）
+            //                     "invoiceTitle" : null //  发票抬头
+            //                 },
+            //                 "insuredList" : [ {   //被保人集合
+            //                     "insuredId" : null,    //被保险人唯一Id
+            //                     "insuredType" : self.policyholdered.insuredType,  //被保险人类型(见接口文档1.5.1.4 被保险人清单中insuredType)
+            //                     "insuredName" : self.policyholdered.name,
+            //                     "idType" : "1", //身份证
+            //                     "idNumber" : self.policyholdered.cardId,
+            //                     "birthDate" : self.policyholdered.birthDate,
+            //                     "mobile" : self.policyholdered.phone,
+            //                     "email" : null,
+            //                     "gender" : self.policyholdered.gender,
+            //                     "beneficialType" : "1",  //受益类型（固定值1）（1-法定2-顺位3-均分4-比例）
+            //                     "occupationCode" : self.policyholdered.work3,//被保险人职业代码
+            //                     "policyholderInsuredRelation" : self.policyholdered.relation //与投保人关系（01-本人02-父母03-子女04-配偶05-其他亲属07-其他）
+            //                 } ],
+            //                 "totalPremium" :  self.money //总保费
+
+            //         }
+
+            //         console.log(self.orderOptions,"ddddddddddd");
+            // console.log(self.policyholder);
+            // console.log(self.policyholdered);
         },
         policyholderedDone: function(){
             if(this.policyholdered.relation == "0"){
@@ -544,11 +745,11 @@ define([
                     alert("被保人的年龄与您选择的投保方案不符");
                     return false;
                 }
-                if((this.policyholdered.relation=="2"||this.policyholdered.relation=="3") && policyholderedAge<=policyholderAge){
+                if((this.policyholdered.relation=="02"||this.policyholdered.relation=="02") && policyholderedAge<=policyholderAge){
                     alert("被保人与投保人的关系和年龄不相称");
                     return false;
                 }
-                if((this.policyholdered.relation=="7"||this.policyholdered.relation=="8") && policyholderedAge>=policyholderAge){
+                if((this.policyholdered.relation=="04"||this.policyholdered.relation=="04") && policyholderedAge>=policyholderAge){
                     alert("被保人与投保人的关系和年龄不相称");
                     return false;
                 }
@@ -557,6 +758,13 @@ define([
                 alert("被保人手机号码不正确");
                 return false;
             }
+            // else{
+                // homeModel.checkPhone(this.policyholdered.phone, function(data){
+                //     console.log("手机检测返回数据为：", data);
+                // }, function(erro){
+                //     console.log("调用接口失败");
+                // });
+            // }
             if(this.policyholdered.work1 == "0"){
                 alert("请选择被保人一级职业");
                 return false;
@@ -568,13 +776,33 @@ define([
             if(this.policyholdered.work3 == "0"){
                 alert("请选择被保人三级职业");
                 return false;
+            }else{
+                if(this.policyholdered.jobClassId=="拒保"){
+                    alert("被保人职业拒保");
+                    return false;
+                }
             }
+            //  homeModel.checkPhone(this.policyholdered.phone, 
+            //     function(data){
+            //         console.log("手机检测返回数据为：", data);
+            //     }, function(erro){
+            //         console.log("调用接口失败");
+            //     }
+            // );
             return true;
         },
         onChangePolicyholderedWork3: function(e){
             e.stopPropagation();
             e.preventDefault();
             this.policyholdered.work3 = this.ui.policyholderedWork3[0].value;
+            for(var i=0; i<this.job3.length; i++){
+                if(this.job3[i].jobCode == this.policyholdered.work3){
+                    this.policyholdered.jobClassId = this.job3[i].jobClassId;
+                    break;
+                }else{
+                    this.policyholdered.jobClassId = "1";
+                }
+            }
 
         },
         onClickPolicyholderedWork3: function(e){
@@ -595,7 +823,7 @@ define([
                 this.job3 = [];
             }
             for(var i=0; i<this.job2.length; i++){
-                if(this.job2[i].jobcode == this.policyholdered.work2){
+                if(this.job2[i].jobCode == this.policyholdered.work2){
                     this.job3 = this.job2[i].childJobs;
                     break;
                 }else{
@@ -604,7 +832,7 @@ define([
             }
             var job3Html = '<option value="0">请选择</option>';
             for(var j=0; j<this.job3.length; j++){
-                job3Html += '<option value="'+this.job3[j].jobcode+'">'+this.job3[j].jobName1||this.job3[j].jobName2+'</option>';
+                job3Html += '<option value="'+this.job3[j].jobCode+'">'+this.job3[j].jobName1||this.job3[j].jobName2+'</option>';
             }
             this.ui.policyholderedWork3.html(job3Html);
         },
@@ -628,7 +856,7 @@ define([
                 this.job3 = [];
             }
             for(var i=0; i<this.job1.length; i++){
-                if(this.job1[i].jobcode == this.policyholdered.work1){
+                if(this.job1[i].jobCode == this.policyholdered.work1){
                     this.job2 = this.job1[i].childJobs;
 
                     break;
@@ -638,7 +866,7 @@ define([
             }
             var job2Html = '<option value="0">请选择</option>';
             for(var j=0; j<this.job2.length; j++){
-                job2Html += '<option value="'+this.job2[j].jobcode+'">'+this.job2[j].jobName1||this.job2[j].jobName2+'</option>';
+                job2Html += '<option value="'+this.job2[j].jobCode+'">'+this.job2[j].jobName1||this.job2[j].jobName2+'</option>';
             }
             this.ui.policyholderedWork2.html(job2Html);
 
@@ -671,6 +899,8 @@ define([
             if(utils.IdentityCodeValid(cardId)){
                 console.log("身份证合法");
                 this.policyholdered.cardId = cardId;
+                this.policyholdered.birthDate = utils.getBirth(cardId);
+                this.policyholdered.gender = utils.getGender(cardId);
             }else{
                 alert("身份证号码不正确");
                 console.log("身份证号码不正确");
@@ -693,7 +923,7 @@ define([
             e.stopPropagation();
             e.preventDefault();
             if(this.policyholderDone()){
-                if(this.ui.policyholderedRelation[0].value == "1"){
+                if(this.ui.policyholderedRelation[0].value == "01"){
                     this.ui.policyholderedName.val(this.policyholder.name);
                     this.ui.policyholderedName.attr("readonly", "readonly");
                     this.policyholdered.name = this.policyholder.name;
@@ -747,6 +977,7 @@ define([
             if(utils.IdentityCodeValid(cardId)){
                 console.log("身份证号码合法");
                 this.policyholder.cardId = cardId;
+                this.policyholder.birthDate = utils.getBirth(cardId);
             }else{
                 alert("身份证号码不正确a");
                 console.log("身份证号码不正确");
@@ -858,6 +1089,72 @@ define([
             this.policyholdered.minDay = ensureAge.minday;
             this.calMoney(this.policyholdered.minAge, this.policyholdered.maxAge, this.policyholdered.hasSocialSecurity, this.policyholdered.ensurePlan);
 
+            if(0<=ensureAge.minAge && ensureAge.maxAge<=5){
+
+                this.policyholdered.insuredType = 21;
+            }
+            else if(6<=ensureAge.minAge && ensureAge.maxAge<=10){
+
+                this.policyholdered.insuredType = 22;
+            }
+            else if(11<=ensureAge.minAge && ensureAge.maxAge<=15){
+
+                this.policyholdered.insuredType = 23;
+            }
+            else if(16<=ensureAge.minAge && ensureAge.maxAge<=20){
+
+                this.policyholdered.insuredType = 24;
+            }
+            else if(21<=ensureAge.minAge && ensureAge.maxAge<=25){
+
+                this.policyholdered.insuredType = 12;
+            }
+            else if(26<=ensureAge.minAge && ensureAge.maxAge<=30){
+
+                this.policyholdered.insuredType = 13;
+            }
+            else if(31<=ensureAge.minAge && ensureAge.maxAge<=35){
+
+                this.policyholdered.insuredType = 14;
+            }
+            else if(36<=ensureAge.minAge && ensureAge.maxAge<=40){
+
+                this.policyholdered.insuredType = 15;
+            }
+            else if(41<=ensureAge.minAge && ensureAge.maxAge<=45){
+
+                this.policyholdered.insuredType = 16;
+            }
+            else if(46<=ensureAge.minAge && ensureAge.maxAge<=50){
+
+                this.policyholdered.insuredType = 17;
+            }
+            else if(51<=ensureAge.minAge && ensureAge.maxAge<=55){
+
+                this.policyholdered.insuredType = 18;
+            }
+            else if(56<=ensureAge.minAge && ensureAge.maxAge<=60){
+
+                this.policyholdered.insuredType = 19;
+            }
+            else if(61<=ensureAge.minAge && ensureAge.maxAge<=65){
+
+                this.policyholdered.insuredType = 20;
+            }
+            else if(66<=ensureAge.minAge && ensureAge.maxAge<=70){
+
+                this.policyholdered.insuredType = 25;
+            }
+            else if(71<=ensureAge.minAge && ensureAge.maxAge<=75){
+
+                this.policyholdered.insuredType = 26;
+            }
+            else if(76<=ensureAge.minAge && ensureAge.maxAge<=80){
+
+                this.policyholdered.insuredType = 27;
+            }
+
+
             $(".product-price").html("价格："+this.money+"元");
         },
         onClickProductBuy: function(e){
@@ -879,16 +1176,17 @@ define([
         onRender : function(){
         },
         show : function(){
-
+            var self = this;
             homeModel.getWork(function(data){
-                console.log(data,"请求职业数据成功");
+                console.log(data, "请求职业数据成功");
                 if(data.status == "0"){
-                    this.job1 = data.jobCategorys;
+                    self.job1 = data.jobCategoryList;
+
                     var job1Html = '<option value="0">请选择</option>';
-                    for(var i=0; i<this.job1.length;i++){
-                        job1Html += '<option value="'+this.job1[i].jobcode+'">'+this.job1[i].jobName1+'</option>';
+                    for(var i=0; i<self.job1.length;i++){
+                        job1Html += '<option value="'+self.job1[i].jobCode+'">'+self.job1[i].jobName1+'</option>';
                     }
-                    this.ui.policyholderedWork1.html(job1Html);
+                    self.ui.policyholderedWork1.html(job1Html);
                 }else{
                     console.log("请求成功，但服务器返回数据错误");
                 }
@@ -915,96 +1213,6 @@ define([
                     window.location.href = url;
                 }
             }
-           
-        // window.location.href = url;
-
-
-            // data={
-            //     status: 0,
-            //     errorMessages: null,
-            //     jobCategorys:[
-            //         {
-            //             jobId: 9,
-            //             jobcode: "B001",
-            //             jobClassId: 1,
-            //             jobName1: "玻璃制造业",
-            //             jobName2: null,
-            //             parentJobCode: null,
-            //             isSpecial: "N",
-            //             childJobs:[
-            //                 {
-            //                     jobId: 16,
-            //                     jobcode: "B001001",
-            //                     jobClassId: 1,
-            //                     jobName1: "技师",
-            //                     jobName2: null,
-            //                     parentJobCode: "B001",
-            //                     isSpecial: "N",
-            //                     childJobs:[
-            //                         {
-            //                             jobId: 26,
-            //                             jobcode: "B001001001",
-            //                             jobClassId: 1,
-            //                             jobName1: "切割技师",
-            //                             jobName2: null,
-            //                             parentJobCode: "B001001",
-            //                             isSpecial: "N",
-            //                             childJobs: []
-            //                         }
-            //                     ]
-            //                 }
-            //             ]
-            //         },
-            //         {
-            //             jobId: 9,
-            //             jobcode: "B002",
-            //             jobClassId: 1,
-            //             jobName1: "玻璃制造业2",
-            //             jobName2: null,
-            //             parentJobCode: null,
-            //             isSpecial: "N",
-            //             childJobs:[
-            //                 {
-            //                     jobId: 16,
-            //                     jobcode: "B002002",
-            //                     jobClassId: 1,
-            //                     jobName1: "技师2",
-            //                     jobName2: null,
-            //                     parentJobCode: "B002",
-            //                     isSpecial: "N",
-            //                     childJobs:[
-            //                         {
-            //                             jobId: 26,
-            //                             jobcode: "B002002002",
-            //                             jobClassId: 1,
-            //                             jobName1: "切割技师2",
-            //                             jobName2: null,
-            //                             parentJobCode: "B002002",
-            //                             isSpecial: "N",
-            //                             childJobs: []
-            //                         }
-            //                     ]
-            //                 }
-            //             ]
-            //         }
-            //     ]
-            // };
-
-            // if(data.status == "0"){
-            //     this.job1 = data.jobCategorys;
-            //     var job1Html = '<option value="0">请选择</option>';
-            //     // console.log(job1Html);
-            //     for(var i=0; i<this.job1.length;i++){
-            //         job1Html += '<option value="'+this.job1[i].jobcode+'">'+this.job1[i].jobName1+'</option>';
-            //     }
-                
-
-            //     this.ui.policyholderedWork1.html(job1Html);
-            // }
-
-            // } else{
-            //     console.log("数据有问题");
-            // }
             this.ui.productTextContent.html(this.toubaoxuzhi);
             
         },

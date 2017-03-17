@@ -6,7 +6,8 @@
     window.utils = utils;
 
     utils.config = {
-        url: "",
+        agencyCode : "AC000006",
+        serverUrl: "http://172.25.16.182:8060",
         wxappid : "wxd027563f8d67dc76"
     };
 
@@ -83,15 +84,15 @@
 
 
     //通过身份证号获取生日
-    utils.getBirth = function(str){
-      if(str.length == 18){
-        var birth = str.substr(6,4)+"-"+str.substr(10,2)+"-"+str.substr(12,2);
-        return birth;
-      }else{
-        var birth = '19' + str.substr(6,2)+"-"+str.substr(8,2)+"-"+str.substr(10,2);
-        return birth;
-      }
-    }
+    // utils.getBirth = function(str){
+    //   if(str.length == 18){
+    //     var birth = str.substr(6,4)+"-"+str.substr(10,2)+"-"+str.substr(12,2);
+    //     return birth;
+    //   }else{
+    //     var birth = '19' + str.substr(6,2)+"-"+str.substr(8,2)+"-"+str.substr(10,2);
+    //     return birth;
+    //   }
+    // }
 
     //通过身份证号获取性别
     utils.getGender = function(str){

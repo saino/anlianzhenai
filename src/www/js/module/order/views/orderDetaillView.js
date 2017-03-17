@@ -6,8 +6,9 @@
 define([
     'common/base/base_view',
     'text!module/order/templates/orderDetaill.html',
-    'marionette'
-],function(BaseView, tpl, mn) {
+    'marionette',
+    'module/order/model/orderModel'
+],function(BaseView, tpl, mn, orderModel) {
     return BaseView.extend({
         id : "orderDetaill",
 
@@ -57,7 +58,13 @@ define([
 
         },
         show: function(){
+            var self = this;
             console.log(this.getOption("codeId"));
+            orderModel.getOrderDetail(self.getOption("codeId"), function(data){
+                console.log("获取订单详情成功:", data);
+            },function(err){
+                console.log("获取订单详情失败", err);
+            });
         },
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){

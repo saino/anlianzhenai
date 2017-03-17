@@ -13,6 +13,10 @@
     -webkit-user-select: none;
 }
 
+*{
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .clear{
     clear: both;
 }
