@@ -30,14 +30,25 @@
         time2 = time2.getTime();
         return parseInt((timer1 - time2)/1000/3600/24/365);
     }
-    utils.getBirth = function(str){
-        if(str.length == 18){
-            var birth = str.substr(6,4)+"-"+str.substr(10,2)+"-"+str.substr(12,2);
-            return birth;
+    utils.getBirth = function(str, noHMS){
+        if(noHMS){
+            if(str.length == 18){
+                var birth = str.substr(6,4)+"-"+str.substr(10,2)+"-"+str.substr(12,2);
+                return birth;
+            }else{
+                var birth = '19' + str.substr(6,2)+"-"+str.substr(8,2)+"-"+str.substr(10,2);
+                return birth;
+            }
         }else{
-            var birth = '19' + str.substr(6,2)+"-"+str.substr(8,2)+"-"+str.substr(10,2);
-            return birth;
+            if(str.length == 18){
+                var birth = str.substr(6,4)+str.substr(10,2)+str.substr(12,2)+"010000";
+                return birth;
+            }else{
+                var birth = '19' + str.substr(6,2)+str.substr(8,2)+str.substr(10,2)+"010000";
+                return birth;
+            }
         }
+        
     }
 //身份证校验是否合法
     utils.IdentityCodeValid = function(code) {

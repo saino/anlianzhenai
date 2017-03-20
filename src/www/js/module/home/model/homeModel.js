@@ -43,6 +43,7 @@ define([], function(){
 
     homeModel.prototype.toBuyProduct = function(options, successCB, errorCB){
     	var url = utils.config.serverUrl + "/ls/services/md/mdProposalRestService/submitProposal";
+    	console.log(JSON.stringify(options),"kkkkkkkkkkkkkkkkkkkkkkk");
     	$.ajax({
     		method: "POST",
     		url: url,

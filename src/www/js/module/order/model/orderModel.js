@@ -18,12 +18,12 @@ define([], function(){
 			}
 		});
     };
-    orderModel.prototype.getOrderDetail = function(orderId, successCB, errorCB){
-    	var url= utils.config.serverUrl + "";
+    orderModel.prototype.getOrderDetail = function(options, successCB, errorCB){
+    	var url= utils.config.serverUrl + "/ls/services/md/mdProposalRestService/getProposalInfo";
     	$.ajax({
 			method: "POST",
 			url: url,
-			data: JSON.stringify(orderId),
+			data: JSON.stringify(options),
 			contentType: "application/json",
 			dataType: "json",
 			processData: false,

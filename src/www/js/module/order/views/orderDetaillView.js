@@ -60,7 +60,10 @@ define([
         show: function(){
             var self = this;
             console.log(this.getOption("codeId"));
-            orderModel.getOrderDetail(self.getOption("codeId"), function(data){
+            var options = {
+                proposalCode: self.getOption("codeId")
+            };
+            orderModel.getOrderDetail(options, function(data){
                 console.log("获取订单详情成功:", data);
             },function(err){
                 console.log("获取订单详情失败", err);

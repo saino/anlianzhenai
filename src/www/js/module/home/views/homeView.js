@@ -536,57 +536,63 @@ define([
                     console.log("手机检测返回数据为：", data);
                     if(data.status == "0" && data.check){
                         self.orderOptions = {
-                            "proposalId" : null,              //订单id                   
-                            "planCode" : self.policyholdered.searchCode,        //六个之一
-                            "policyCode" : null,
-                            "proposalCode" : null,            
-                            "printNo" : null,                                                
-                            "status" : null,                        
-                            "generatedDate" : null,
-                            "effectiveDate" : null,
-                            "expireDate" : null,
-                            "policy" : {
-                                "agencyPolicyRef" :null,    //第三方渠道公司保单号码或者第三方渠道公司订单号码
-                                "planCode" : self.policyholdered.searchCode,                          // 六个之一
-                                "issueDate" :null,               // 出单日期
-                                "effectiveDate" :null,           // 保单生效日期
-                                "expireDate": null,              //保单结束日期
-                                "groupSize" : "1"                            //  被保险人总个数（固定值1）
-                            },
-                            "agency" : {
-                                "agencyCode" : utils.config.agencyCode                          // 安联渠道代码（固定值）
-                            },                                                    
-                            "policyHolder" : {                                 //   投保人对象
-                                "policyHolderType" : "I",//投保人类型（固定值I）（（I-个人(Individual) C-企业或者机构）
-                                "policyHolderName" : self.policyholder.name,//投保人名称
-                                "phIdType" : "1",                   //证件类型（固定值1）
-                                "phIdNumber" : self.policyholder.cardId,      //证件号码
-                                "phBirthDate" : self.policyholder.birthDate,
-                                "phTelephone" : self.policyholder.phone,
-                                "phAddress" : null,
-                                "phPostCode" : null,
-                                "phEmail" : self.policyholder.email,
-                                "reqFaPiao" : "0",    // 是否打印发票（固定0）（1-需要 0-不需要）
-                                "reqMail" : "0",       //是否邮寄发票（固定0）（1-需要 0-不需要）
-                                "invoiceTitle" : null //  发票抬头
-                            },
-                            "insuredList" : [ {   //被保人集合
-                                "insuredId" : null,    //被保险人唯一Id
-                                "insuredType" : self.policyholdered.insuredType,  //被保险人类型(见接口文档1.5.1.4 被保险人清单中insuredType)
-                                "insuredName" : self.policyholdered.name,
-                                "idType" : "1", //身份证
-                                "idNumber" : self.policyholdered.cardId,
-                                "birthDate" : self.policyholdered.birthDate,
-                                "mobile" : self.policyholdered.phone,
-                                "email" : null,
-                                "gender" : self.policyholdered.gender,
-                                "beneficialType" : "1",  //受益类型（固定值1）（1-法定2-顺位3-均分4-比例）
-                                "occupationCode" : self.policyholdered.work3,//被保险人职业代码
-                                "policyholderInsuredRelation" : self.policyholdered.relation //与投保人关系（01-本人02-父母03-子女04-配偶05-其他亲属07-其他）
-                            } ],
-                            "totalPremium" :  self.money //总保费
-                        };
-                        homeModel.toBuyProduct(self.options, function(data){
+                            "proposalVO": {
+                                    // "proposalId" : null,              //订单id                   
+                                    "planCode" : self.policyholdered.searchCode,        //六个之一
+                                    "userId": "yangchengqiang",
+                                    // "policyCode" : null,
+                                    // "proposalCode" : null,            
+                                    // "printNo" : null,                                                
+                                    // "status" : null,                        
+                                    // "generatedDate" : null,
+                                    // "effectiveDate" : null,
+                                    // "expireDate" : null,
+                                    "policy" : {
+                                        // "agencyPolicyRef" :null,    //第三方渠道公司保单号码或者第三方渠道公司订单号码
+                                        "planCode" : self.policyholdered.searchCode,                          // 六个之一
+                                        // "issueDate" :null,               // 出单日期
+                                        // "effectiveDate" :null,           // 保单生效日期
+                                        // "expireDate": null,              //保单结束日期
+                                        "groupSize" : "1"                            //  被保险人总个数（固定值1）
+                                    },
+                                    "agency" : {
+                                        "agencyCode" : utils.config.agencyCode                          // 安联渠道代码（固定值）
+                                    },                                                    
+                                    "policyHolder" : {                                 //   投保人对象
+                                        "policyHolderType" : "I",//投保人类型（固定值I）（（I-个人(Individual) C-企业或者机构）
+                                        "policyHolderName" : self.policyholder.name,//投保人名称
+                                        "phIdType" : "1",                   //证件类型（固定值1）
+                                        "phIdNumber" : self.policyholder.cardId,      //证件号码
+                                        "phBirthDate" : self.policyholder.birthDate,
+                                        "phTelephone" : self.policyholder.phone,
+                                        // "phAddress" : null,
+                                        // "phPostCode" : null,
+                                        "phEmail" : self.policyholder.email,
+                                        "reqFaPiao" : "0",    // 是否打印发票（固定0）（1-需要 0-不需要）
+                                        "reqMail" : "0",       //是否邮寄发票（固定0）（1-需要 0-不需要）
+                                        // "invoiceTitle" : null //  发票抬头
+                                    },
+                                    "insuredList" : [ {   //被保人集合
+                                        // "insuredId" : null,    //被保险人唯一Id
+                                        "insuredType" : self.policyholdered.insuredType,  //被保险人类型(见接口文档1.5.1.4 被保险人清单中insuredType)
+                                        "insuredName" : self.policyholdered.name,
+                                        "idType" : "1", //身份证
+                                        "idNumber" : self.policyholdered.cardId,
+                                        "birthDate" : self.policyholdered.birthDate,
+                                        "mobile" : self.policyholdered.phone,
+                                        // "email" : null,
+                                        "gender" : self.policyholdered.gender,
+                                        "beneficialType" : "1",  //受益类型（固定值1）（1-法定2-顺位3-均分4-比例）
+                                        "occupationCode" : self.policyholdered.work3,//被保险人职业代码
+                                        "policyholderInsuredRelation" : self.policyholdered.relation, //与投保人关系（01-本人02-父母03-子女04-配偶05-其他亲属07-其他）
+                                        // "jobCode1": self.ui.policyholderedWork1.find("option:selected").text(),
+                                        // "jobCode2": self.ui.policyholderedWork2.find("option:selected").text(),
+                                        // "jobCode3": self.ui.policyholderedWork3.find("option:selected").text()
+                                    } ],
+                                    "totalPremium" :  self.money //总保费
+                                }
+                            };
+                        homeModel.toBuyProduct(self.orderOptions, function(data){
                             console.log("可以选择购买", data);
                             self.ui.selectBuyWay.fadeIn();
                         }, function(error){
@@ -934,6 +940,9 @@ define([
                     this.ui.policyholderedId.attr("readonly", "readonly");
                     this.policyholdered.cardId = this.policyholder.cardId;
 
+                    this.policyholdered.birthDate = utils.getBirth(this.policyholdered.cardId);
+                    this.policyholdered.gender = utils.getGender(this.policyholdered.cardId);
+
                 }else{
                     this.ui.policyholderedName.removeAttr("readonly");
                     this.ui.policyholderedPhone.removeAttr("readonly");
@@ -1177,6 +1186,7 @@ define([
         },
         show : function(){
             var self = this;
+            // console.log(self.ui.policyholderedWork1.find("option:selected").text());
             homeModel.getWork(function(data){
                 console.log(data, "请求职业数据成功");
                 if(data.status == "0"){
