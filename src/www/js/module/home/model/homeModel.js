@@ -60,8 +60,41 @@ define([], function(){
     	});
     };
 
-    homeModel.prototype.getUserId = function(code, successCB, errorCB){
-    	var url = utils.config.serverUrl+"";
+    homeModel.prototype.payment = function(options, successCB, errorCB){
+    	var url = utils.config.serverUrl + "/ls/services/md/mdProposalRestService/payment";
+    	console.log(JSON.stringify(options),"ddddddddddd");
+    	$.ajax({
+    		method: "POST",
+    		url: url,
+    		data: JSON.stringify(options),
+    		contentType: "application/json",
+    		dataType: "json",
+    		processData: false,
+    		success: function(data){
+    			successCB && successCB(data);
+    		},
+    		error: function(data){
+    			errorCB: errorCB(data);
+    		}
+    	});
+    };
+
+    homeModel.prototype.getUserId = function(options, successCB, errorCB){
+    	var url = utils.config.serverUrl + "/ls/services/md/mdProposalRestService/payment";
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(options),
+            contentType: "application/json",
+            dataType: "json",
+            processData: false,
+            success: function(data){
+                successCB && successCB(data);
+            },
+            error: function(data){
+                errorCB: errorCB(data);
+            }
+        });
     };
 
     homeModel.prototype.getWeiXinCode = function(){

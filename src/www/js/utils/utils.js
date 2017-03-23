@@ -7,13 +7,16 @@
 
     utils.config = {
         agencyCode : "AC000006",
-        serverUrl: "http://172.25.16.182:8060",
-        wxappid : "wxd027563f8d67dc76"
+        // serverUrl: "http://172.25.16.182:8060",
+        serverUrl: "http://210.13.77.75:14600",
+        // serverUrl: "http://172.30.2.158:8080",
+        wxappid : "wxd027563f8d67dc76",
+        orderList : []
     };
 
     utils.testPhone = function(phone){
         var pass = true;
-        var REGX = /^1(3|4|5|6|7|8)\d{9}/;
+        var REGX = /^1(3|4|5|6|7|8)\d{9}$/;
         pass = REGX.test(phone);
         return pass;
     }
