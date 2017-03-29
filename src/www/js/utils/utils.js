@@ -10,8 +10,12 @@
         // serverUrl: "http://172.25.16.182:8060",
         serverUrl: "http://210.13.77.75:14600",
         // serverUrl: "http://172.30.2.158:8080",
-        wxappid : "wxd027563f8d67dc76",
-        orderList : []
+        wxappid : "wx2f1e8cd62899f8dd",
+        orderList : [],
+        //测试环境支付地址  
+        paymentUrl: "https://eservice.allianz.cn/paymentgateway_test/payment",
+        //测试环境加密常量
+        secertStr: "828f7f755bd7de957175f8e8b5301ccc",
     };
 
     utils.testPhone = function(phone){

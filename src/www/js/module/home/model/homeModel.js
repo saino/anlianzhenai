@@ -61,7 +61,7 @@ define([], function(){
     };
 
     homeModel.prototype.payment = function(options, successCB, errorCB){
-    	var url = utils.config.serverUrl + "/ls/services/md/mdProposalRestService/payment";
+    	var url = utils.config.serverUrl + "/ls/services/md/mdProposalRestService/preparePaymentRequest";
     	console.log(JSON.stringify(options),"ddddddddddd");
     	$.ajax({
     		method: "POST",
@@ -80,7 +80,9 @@ define([], function(){
     };
 
     homeModel.prototype.getUserId = function(options, successCB, errorCB){
-    	var url = utils.config.serverUrl + "/ls/services/md/mdProposalRestService/payment";
+    	var url = utils.config.serverUrl + "/ls/services/md/mdProposalRestService/getOpenId";
+        // alert(JSON.stringify(options));
+        alert("开始请求openId");
         $.ajax({
             method: "POST",
             url: url,
@@ -90,8 +92,10 @@ define([], function(){
             processData: false,
             success: function(data){
                 successCB && successCB(data);
+                alert("服务器返回正确openId");
             },
             error: function(data){
+                alert("服务器返回错误openId");
                 errorCB: errorCB(data);
             }
         });

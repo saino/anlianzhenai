@@ -41,3 +41,15 @@
 .order-detaill-item{
 	width: 100%;
 }
+#result-status{
+    display: none;
+    height: 130px;
+    width: 100%;
+    font-size: 5.0em;
+    text-align: center;
+    line-height: 130px;
+    position: absolute;
+    bottom: 0;
+    background: #dbdbe0;
+    border-radius: 44px;
+}

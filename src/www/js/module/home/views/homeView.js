@@ -6,8 +6,9 @@ define([
     'text!module/home/templates/home.html',
     'marionette',
     'module/home/model/homeModel',
-    'common/views/circle'
-],function(BaseView, homeTPL, mn, homeModel, loadingCircle) {
+    'common/views/circle',
+    'module/home/model/md5'
+],function(BaseView, homeTPL, mn, homeModel, loadingCircle, MD5) {
     return BaseView.extend({
         id : "home",
 
@@ -27,6 +28,7 @@ define([
         job1: [],
         job2: [],
         job3: [],
+        proposalVO: null, //订单对象
         proposalCode: null, //订单号
         orderOptions:{
 
@@ -59,7 +61,17 @@ define([
             gender: null,
             insuredType: "24",
         },
+        //购买form表单的参数
+        buyFormParameters: {
+            AgencyCode: null,   //渠道代码
+            PolicyRef: null,     //安联保单号码
+            TotalPremium: 0,   //保费，单位：元(人民币)，精确到小数点后两位
+            PaymentMethod: null,   //支付方式：“alipay”：支付宝；“wapalipay”：手机支付宝；“99bill”：快钱;“wxpay”:微信支付
+            NotifyUrl: null,   //异步通知URL
+            ReturnUrl: null,   //同步通知URL
+            Sign: null,   //MD5 32位加密串，加密规则：MD5 (除sign参数外的六个参数按照“参数=参数值”的模式用“&”字符拼接成字符串  + 加密常量).getBytes("UTF-8"))各个参数顺序:agencyCode+notifyUrl+paymentMethod+policyRef+returnUrl+totalPremium
 
+        },
 
         ui : {
             product: ".product",
@@ -89,8 +101,15 @@ define([
             policyholderedWork2: "#policyholdered-work-2",        //被保人一级职业
             policyholderedWork3: "#policyholdered-work-3",        //被保人一级职业
 
-            toBuy: "#to-buy",      //确定购买
-            selectBuyWay: ".select-buy-way",  //购买方式
+            toBuy: "#to-buy",      //生成订单
+            selectBuyWay: ".select-buy-way",  //订单详情
+            proposalCode: "#proposal-code", //订单号
+            proposalTime: "#proposal-time", //订单时间
+            proposalP1: "#proposal-p1",    //投保人
+            proposalP2: "#proposal-p2",    //被保人
+            proposalPremium: "#proposal-premium", //保费
+
+            errorPage: ".error-page"  //网络错误
 
         },
         events : {
@@ -100,7 +119,7 @@ define([
             "change @ui.ensurePlan": "onChangEnsurePlan", 
             "change @ui.hasSocialSecurity": "onChangeHasSocialSecurity",
             "change @ui.ensureAge": "onchangeEnsureAge",
-            "tap @ui.productBuy": "onClickProductBuy",
+            "tap @ui.productBuy": "onClickProductBuy",  //点击购买
             //投保人
             "blur @ui.policyholderName": "onBlurPolicyholderName",
             "blur @ui.policyholderPhone": "onBlurPolicyholderPhone",
@@ -125,55 +144,98 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            var orderDetailUrl = window.location.href + "#/order/detail/" + self.proposalCode;
-            alert(orderDetailUrl);
+            // var orderDetailUrl = "http://li.ebaocloud.com.cn/ysmd/index.html" + "#/order/detail/" + self.proposalCode;
+            // self.buyFormParameters.NotifyUrl = "http://www.baidu.com";
+            // self.buyFormParameters.ReturnUrl = orderDetailUrl;
             var target = $(e.target);
-            var options = {
-                paymentMethod: null, 
-                proposalId: self.proposalId,
-                returnUrl: orderDetailUrl,
-                notifyUrl: orderDetailUrl
-            }
-            if(target.hasClass("buy-zhifubao")){
-                // console.log("支付宝购买");
-                options.paymentMethod = "alipay";
-                LoadingCircle&&LoadingCircle.start();
-                homeModel.payment(options, function(data){
+            // if(target.hasClass("buy-zhifubao")){
+            //     // console.log("支付宝购买");
+            //     // options.paymentMethod = "alipay";
+            //     self.buyFormParameters.PaymentMethod = "alipay";
+            //     // LoadingCircle&&LoadingCircle.start();
+            //     // homeModel.payment(options, function(data){
 
-                    $("#home").append(data.result);
-                    LoadingCircle&&LoadingCircle.end();
-                    // console.log("支付宝支付成功", data);
-                }, function(error){
-                    console.log("支付宝支付失败", error);
-                    LoadingCircle&&LoadingCircle.end();
-                });
-            }
-            else if(target.hasClass("buy-weixin")){
+            //     //     $("#home").append(data.result);
+            //     //     LoadingCircle&&LoadingCircle.end();
+            //     //     // console.log("支付宝支付成功", data);
+            //     // }, function(error){
+            //     //     console.log("支付宝支付失败", error);
+            //     //     LoadingCircle&&LoadingCircle.end();
+            //     // });
+            // }
+            // else 
+            // console.log("订单信息", self.proposalVO);
+            // self.ui.proposalCode.html("订单号："+self.proposalCode);       //订单号
+            // self.ui.proposalTime.html("时间："+self.proposalVO.generatedDate.replace(/T/," "));       //订单时间
+            // self.ui.proposalP1.html("投保人："+self.proposalVO.policyHolderName);         //投保人
+            // self.ui.proposalP2.html("被保人："+self.proposalVO.insuredName);         //被保人
+            // self.ui.proposalPremium.html("保费："+self.proposalVO.totalPremium);    //保费
+            if(target.hasClass("buy-weixin")){
                 // console.log("微信购买");
-                options.paymentMethod = "wxpay";
+                // options.paymentMethod = "wxpay";
+                // self.buyFormParameters.PaymentMethod = "wxpay";
                 LoadingCircle&&LoadingCircle.start();
+                var options = {
+                    proposalCode: self.proposalCode,
+                    returnUrl: "http://li.ebaocloud.com.cn/ysmd/index.html" + "#/order/detail/" + self.proposalCode,
+                }
                 homeModel.payment(options, function(data){
-                    // console.log("微信支付成功", data);
+                    console.log("报文信息",data);
+                    var dataObj = data.requestString.split("&");
+                    var dataObj1 = {};
+                    for(var i=0; i<dataObj.length; i++){
+                        var dataObjKey = dataObj[i].split("=")[0];
+                        var dataObjvalue = dataObj[i].split("=")[1];
+                        dataObj1[dataObjKey] = dataObjvalue;
+                    }
+                    self.buyFormParameters.AgencyCode = dataObj1.agencyCode;
+                    self.buyFormParameters.PolicyRef = dataObj1.policyRef;
+                    self.buyFormParameters.TotalPremium = dataObj1.totalPremium;
+                    self.buyFormParameters.PaymentMethod = "wxpay";
+                    self.buyFormParameters.NotifyUrl = dataObj1.notifyUrl;
+                    self.buyFormParameters.ReturnUrl = dataObj1.returnUrl;
+                    self.buyFormParameters.Sign = dataObj1.sign;
+                    console.log(self.buyFormParameters);
+                    console.log(utils.config.paymentUrl);
+                    alert("即将发送post form 请求",utils.config.paymentUrl);
+                    var buyFormHtml='<form id="myForm" method="POST" action="'+utils.config.paymentUrl+'">'+
+                                        '<input type="hidden" name="AgencyCode" value="'+dataObj1.agencyCode+'"/>'+
+                                        '<input type="hidden" name="PolicyRef" value="'+dataObj1.policyRef+'"/>'+
+                                        '<input type="hidden" name="TotalPremium" value="'+dataObj1.totalPremium+'"/>'+
+                                        '<input type="hidden" name="PaymentMethod" value="'+"wxpay"+'"/>'+
+                                        '<input type="hidden" name="NotifyUrl" value="'+dataObj1.notifyUrl+'"/>'+
+                                        '<input type="hidden" name="ReturnUrl" value="'+dataObj1.returnUrl+'"/>'+
+                                        '<input type="hidden" name="Sign" value="'+dataObj1.sign+'"/>'+
+                                    '</form>'+
+                                    '<script>document.getElementById("myForm").submit();</script>';                                  ;
+
+
+                    $("#home").append(buyFormHtml);;
                     LoadingCircle&&LoadingCircle.end();
-                    $("#home").append(data.result);
                 }, function(error){
                     console.log("微信支付失败", error);
+                    alert("订单异常,请重新下单");
                     LoadingCircle&&LoadingCircle.end();
                 });
             }
             else {
-                // console.log("取消购买");
+                console.log("取消购买");
                 payment = null;
             }
-            // var options = {
-            //     paymentMethod: payment, 
-            //     proposalId: self.proposalId;
-            // }
-            // homeModel.payment(options, function(data){
-            //     console.log("支付成功");
-            // }, function(error){
-            //     console.log("支付失败");
-            // });
+
+            // var signTemp = self.buyFormParameters.AgencyCode+"&"+self.buyFormParameters.NotifyUrl+"&"+self.buyFormParameters.PaymentMethod+"&"+self.buyFormParameters.PolicyRef+"&"+self.buyFormParameters.ReturnUrl+"&"+self.buyFormParameters.TotalPremium+utils.config.secertStr;
+            // self.buyFormParameters.Sign = MD5.hex_md5_32(signTemp);
+
+            // var buyFormHtml =   '<form method="POST" action="">'+
+            //                         '<input type="hidden" name="AgencyCode" value="'+self.buyFormParameters.AgencyCode+'"/>'+
+            //                         '<input type="hidden" name="PolicyRef" value="'+self.buyFormParameters.PolicyRef+'"/>'+
+            //                         '<input type="hidden" name="TotalPremium" value="'+self.buyFormParameters.TotalPremium+'"/>'+
+            //                         '<input type="hidden" name="PaymentMethod" value="'+self.buyFormParameters.PaymentMethod+'"/>'+
+            //                         '<input type="hidden" name="NotifyUrl" value="'+self.buyFormParameters.NotifyUrl+'"/>'+
+            //                         '<input type="hidden" name="ReturnUrl" value="'+self.buyFormParameters.ReturnUrl+'"/>'+
+            //                         '<input type="hidden" name="Sign" value="'+self.buyFormParameters.Sign+'"/>'+
+            //                     '</form>';
+
             this.ui.selectBuyWay.fadeOut();
 
 
@@ -576,13 +638,20 @@ define([
             LoadingCircle&&LoadingCircle.start();
             homeModel.checkPhone(options, 
                 function(data){
+                    
                     console.log("手机检测返回数据为：", data);
-                    if(data.status == "0" && data.check){
+                    if(data.status == "1"){
+                        LoadingCircle&&LoadingCircle.end();
+                        alert("校验手机号服务错误");
+                    }
+                    else if(data.check){
+
                         self.orderOptions = {
                             "proposalVO": {
                                     // "proposalId" : null,              //订单id                   
-                                    "planCode" : self.policyholdered.searchCode,        //六个之一
-                                    "userId": "yangchengqiang",
+                                    // "planCode" : self.policyholdered.searchCode,        //六个之一
+                                    "planCode": "apliyTest",
+                                    "userId": window.sessionStorage.openId,
                                     // "policyCode" : null,
                                     // "proposalCode" : null,            
                                     // "printNo" : null,                                                
@@ -592,7 +661,8 @@ define([
                                     // "expireDate" : null,
                                     "policy" : {
                                         // "agencyPolicyRef" :null,    //第三方渠道公司保单号码或者第三方渠道公司订单号码
-                                        "planCode" : self.policyholdered.searchCode,                          // 六个之一
+                                        // "planCode" : self.policyholdered.searchCode,                          // 六个之一
+                                        "planCode": "apliyTest",
                                         // "issueDate" :null,               // 出单日期
                                         // "effectiveDate" :null,           // 保单生效日期
                                         // "expireDate": null,              //保单结束日期
@@ -617,7 +687,8 @@ define([
                                     },
                                     "insuredList" : [ {   //被保人集合
                                         // "insuredId" : null,    //被保险人唯一Id
-                                        "insuredType" : self.policyholdered.insuredType,  //被保险人类型(见接口文档1.5.1.4 被保险人清单中insuredType)
+                                        // "insuredType" : self.policyholdered.insuredType,  //被保险人类型(见接口文档1.5.1.4 被保险人清单中insuredType)
+                                        "insuredType": 1,
                                         "insuredName" : self.policyholdered.name,
                                         "idType" : "1", //身份证
                                         "idNumber" : self.policyholdered.cardId,
@@ -637,10 +708,25 @@ define([
                             };
                         homeModel.toBuyProduct(self.orderOptions, function(data){
                             console.log("可以选择购买", data);
-
+                            //订单信息
+                            self.proposalVO = data.proposalVO;
                             LoadingCircle&&LoadingCircle.end();
                             self.proposalCode = data.proposalVO.proposalCode;
-                            self.proposalId = data.proposalVO.proposalId;
+
+                            console.log("订单信息", self.proposalVO);
+                            self.ui.proposalCode.html("订单号："+self.proposalCode);       //订单号
+                            self.ui.proposalTime.html("时间："+self.proposalVO.generatedDate.replace(/T/," "));       //订单时间
+                            self.ui.proposalP1.html("投保人："+self.proposalVO.policyHolder.policyHolderName);         //投保人
+                            self.ui.proposalP2.html("被保人："+self.proposalVO.insuredList[0].insuredName);         //被保人
+                            self.ui.proposalPremium.html("保费："+self.proposalVO.totalPremium);    //保费
+
+
+                            // self.proposalId = data.proposalVO.proposalId;
+
+                            // self.buyFormParameters.AgencyCode = data.proposalVO.agency.agencyCode;
+                            // self.buyFormParameters.PolicyRef = data.proposalVO.printNo;
+                            // self.buyFormParameters.TotalPremium = data.proposalVO.totalPremium;
+
                             self.ui.selectBuyWay.fadeIn();
                         }, function(error){
                             LoadingCircle&&LoadingCircle.end();
@@ -648,18 +734,16 @@ define([
                         });
                         // self.ui.selectBuyWay.fadeIn();
                         console.log("手机号码可用", self.orderOptions,"ddddddddddd");
-                    }else if(data.status=="0" && !data.check){
+                    }
+                    else if(!data.check){
                         LoadingCircle&&LoadingCircle.end();
                         alert("同一被保人手机号限保五单");
-
-                    }else{
-                        LoadingCircle&&LoadingCircle.end();
-                        alert("服务错误");
                     }
-                    
-
+                    alert(JSON.stringify(data));
                 }, function(erro){
-                    alert("服务错误");
+
+                    alert("手机服务错误");
+                    alert(JSON.stringify(erro));
                     LoadingCircle&&LoadingCircle.end();
                     console.log("调用接口检测被保人手机失败");
                 }
@@ -1103,8 +1187,19 @@ define([
         },
         onClickProductBuy: function(e){
             e.stopPropagation();
-
+            e.preventDefault();
             this.ui.productDetail.scrollTop(this.ui.productPolicyholder[0].offsetTop-88);
+
+            // var aaa = '<form id="myform" method="POST" action="a.html">'+
+            //             '<input type="hidden" name="AgencyCode" value="'+"ddddd"+'"/>'+
+            //             // '<input type="submit" name="btn" value="btn" onclick="submit()" />'+
+            //         '</form>'+
+            //         '<script type="text/javascript">'+
+            //                 'alert("点击了提交按钮ddll");'+
+            //                'document.getElementById("myform").submit();'+
+            //         '</script>';
+            // console.log(aaa);
+            // $("#home").append(aaa);
 
         },
         
@@ -1119,9 +1214,14 @@ define([
         },
         //渲染完模板后执行,此时当前page没有添加到document
         onRender : function(){
+            // window.onbeforeunload=function(){
+            //     window.location.href = "http://www.baidu.com";
+            //     alert("不要刷新。。。。");
+            // }
         },
         show : function(){
             var self = this;
+            // alert("show");
             // console.log(self.ui.policyholderedWork1.find("option:selected").text());
             LoadingCircle&&LoadingCircle.start();
             homeModel.getWork(function(data){
@@ -1142,8 +1242,9 @@ define([
                 LoadingCircle&&LoadingCircle.end();
                 console.log(erro,"请求职业数据失败");
             });
+            window.sessionStorage.openId = "0k6dtsyJhKE1GmfNz9tb0sJrn_tl";
             var openId = window.sessionStorage.openId;
-            if(!openId){
+            if(!openId || openId==""){
                 var search = window.location.search;
                 if(search.indexOf("?")>=0&&search.indexOf("code")>=0){
                     var paramsObj = {};
@@ -1153,36 +1254,41 @@ define([
                         var paramValue = params[i].split("=")[1];
                         paramsObj[paramName] = paramValue;
                     }
-                    console.log(paramsObj);
-                    alert(window.location);
-                    alert(paramsObj.code);
-                    console.log("此时应调用java接口将code:'"+paramsObj.code+"'的内容发送过去");
-                    window.sessionStorage.code = params.code;
                     var options = {
-                        wxCode: params.code
+                        wxCode: paramsObj.code
                     }
+                    // alert("开始请求openId");
                     homeModel.getUserId(options, function(data){
-                        console.log(data);
+                        if(data.status == "1"){
+                            self.ui.errorPage.show();
+
+                        }else{
+
+                            window.sessionStorage.openId = data.openId;
+                        }
+                        alert(JSON.stringify(data));
                     }, function(error){
                         console.log(error);
+                        // alert("获取openId返回错误");
+                        self.ui.errorPage.show();
                     });
-
-                    window.sessionStorage.openId="xxxfff";
                 }else{
-                    alert(encodeURIComponent(window.location.href));
-                    // var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ utils.config.wxappid +'&redirect_uri='+ encodeURIComponent(window.location.href) +'&response_type=code&scope=snsapi_base#wechat_redirect';
-                    var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ utils.config.wxappid +'&redirect_uri='+ encodeURIComponent(window.location.href) +'&response_type=code&scope=snsapi_base#wechat_redirect';
-                    alert(url);
+                    var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ utils.config.wxappid +'&redirect_uri='+ encodeURIComponent(window.location.href) +'&response_type=code&scope=snsapi_base&connect_redirect=1#wechat_redirect';
                     window.location.href = url;
                 }
+            }else{
             }
             this.ui.productTextContent.html(this.toubaoxuzhi);
             
         },
+        // window.onbeforeunload: function(){
+        //     window.event.returnValue='刷什么新，快按“取消”吧！';
+        // },
 
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
             var index=this.ui.ensurePlan.selectedIndex ; 
+            // console.log(MD5.hex_md5_32("eee".getBytes("UTF-8")));
         
         },
 

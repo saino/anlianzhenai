@@ -53,7 +53,7 @@ define([
         onRender : function(){
             var self = this;
             var options = {
-                userId: "yangchengqiang"
+                userId: window.sessionStorage.openId
             }
             LoadingCircle && LoadingCircle.start();
             orderModel.getOrderList(options, function(dataList){

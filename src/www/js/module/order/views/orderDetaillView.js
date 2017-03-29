@@ -8,8 +8,9 @@ define([
     'text!module/order/templates/orderDetaill.html',
     'marionette',
     'module/order/model/orderModel',
-    'common/views/circle'
-],function(BaseView, tpl, mn, orderModel, loadingCircle) {
+    'common/views/circle',
+    'module/home/model/homeModel'
+],function(BaseView, tpl, mn, orderModel, loadingCircle, homeModel) {
     return BaseView.extend({
         id : "orderDetaill",
 
@@ -19,14 +20,58 @@ define([
         // _isShow : false,
 
         // key : selector
+        anLianProposalVO: null,//订单详情对象
         ui : {
             productDetail: ".product-detail",
             goBack: ".go-back",
+            resultStatus: "#result-status", //支付结果
         },
         //事件添加
         events : {
             "tap @ui.productDetail": "onClickProductDetail",
-            "tap @ui.goBack": "onClickGoBack"
+            "tap @ui.goBack": "onClickGoBack",
+            "tap @ui.resultStatus": "onClickResultStatus"
+        },
+        onClickResultStatus: function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            LoadingCircle&&LoadingCircle.start();
+            var options = {
+                proposalCode: self.proposalCode,
+                returnUrl: "http://li.ebaocloud.com.cn/ysmd/index.html" + "#/order/detail/" + self.proposalCode,
+            }
+            homeModel.payment(options, function(data){
+                console.log("报文信息",data);
+                var dataObj = data.requestString.split("&");
+                var dataObj1 = {};
+                for(var i=0; i<dataObj.length; i++){
+                    var dataObjKey = dataObj[i].split("=")[0];
+                    var dataObjvalue = dataObj[i].split("=")[1];
+                    dataObj1[dataObjKey] = dataObjvalue;
+                }
+                console.log(dataObj1);
+                alert(utils.config.paymentUrl);
+                // alert(dataObj1.agencyCode);
+                var buyFormHtml='<form id="myForm" method="POST" action="'+utils.config.paymentUrl+'">'+
+                                    '<input type="hidden" name="AgencyCode" value="'+dataObj1.agencyCode+'"/>'+
+                                    '<input type="hidden" name="PolicyRef" value="'+dataObj1.policyRef+'"/>'+
+                                    '<input type="hidden" name="TotalPremium" value="'+dataObj1.totalPremium+'"/>'+
+                                    '<input type="hidden" name="PaymentMethod" value="'+"wxpay"+'"/>'+
+                                    '<input type="hidden" name="NotifyUrl" value="'+dataObj1.notifyUrl+'"/>'+
+                                    '<input type="hidden" name="ReturnUrl" value="'+dataObj1.returnUrl+'"/>'+
+                                    '<input type="hidden" name="Sign" value="'+dataObj1.sign+'"/>'+
+                                '</form>';
+                                // '<script>document.getElementById("myForm").submit();</script>';                                  ;
+                $("#orderDetaill").append(buyFormHtml);;
+                LoadingCircle&&LoadingCircle.end();
+            }, function(error){
+                console.log("微信支付失败", error);
+                alert("订单异常,请重新下单");
+                LoadingCircle&&LoadingCircle.end();
+            });
+
+
         },
         onClickGoBack: function(e){
             e.stopPropagation();
@@ -60,9 +105,10 @@ define([
         },
         show: function(){
             var self = this;
+            self.proposalCode = self.getOption("codeId");
             console.log(this.getOption("codeId"));
             var options = {
-                proposalCode: self.getOption("codeId")
+                proposalCode: self.proposalCode
             };
             LoadingCircle && LoadingCircle.start();
             orderModel.getOrderDetail(options, function(data){
@@ -93,6 +139,7 @@ define([
                     // }
                 if(data.status == "0"){
                     var orderDetaill = data.anLianProposalVO;
+                    self.anLianProposalVO = data.anLianProposalVO;
 
                     var status = "";
                     if(orderDetaill.status == "51"){
@@ -115,6 +162,9 @@ define([
                     }
                     if(orderDetaill.status == "201"){
                         status = "已承保";
+                        self.ui.resultStatus.hidden();
+                    }else{
+                        self.ui.resultStatus.show();
                     }
                     var relation = "";
                     if(orderDetaill.insuredList[0].policyholderInsuredRelation=="01"){
