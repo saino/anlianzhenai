@@ -39,7 +39,7 @@ define([
             LoadingCircle&&LoadingCircle.start();
             var options = {
                 proposalCode: self.proposalCode,
-                returnUrl: "http://li.ebaocloud.com.cn/ysmd/index.html" + "#/order/detail/" + self.proposalCode,
+                returnUrl: "http://li.ebaocloud.com.cn/ysmd/index.html" + "#order/detail/" + self.proposalCode,
             }
             homeModel.payment(options, function(data){
                 console.log("报文信息",data);
@@ -50,19 +50,20 @@ define([
                     var dataObjvalue = dataObj[i].split("=")[1];
                     dataObj1[dataObjKey] = dataObjvalue;
                 }
-                console.log(dataObj1);
-                alert(utils.config.paymentUrl);
+                // console.log(dataObj1);
+                // alert(utils.config.paymentUrl);
+                // alert("aabb.html");
                 // alert(dataObj1.agencyCode);
                 var buyFormHtml='<form id="myForm" method="POST" action="'+utils.config.paymentUrl+'">'+
-                                    '<input type="hidden" name="AgencyCode" value="'+dataObj1.agencyCode+'"/>'+
-                                    '<input type="hidden" name="PolicyRef" value="'+dataObj1.policyRef+'"/>'+
-                                    '<input type="hidden" name="TotalPremium" value="'+dataObj1.totalPremium+'"/>'+
-                                    '<input type="hidden" name="PaymentMethod" value="'+"wxpay"+'"/>'+
-                                    '<input type="hidden" name="NotifyUrl" value="'+dataObj1.notifyUrl+'"/>'+
-                                    '<input type="hidden" name="ReturnUrl" value="'+dataObj1.returnUrl+'"/>'+
-                                    '<input type="hidden" name="Sign" value="'+dataObj1.sign+'"/>'+
-                                '</form>';
-                                // '<script>document.getElementById("myForm").submit();</script>';                                  ;
+                                    '<input type="hidden" name="agencyCode" value="'+dataObj1.agencyCode+'"/>'+
+                                    '<input type="hidden" name="policyRef" value="'+dataObj1.policyRef+'"/>'+
+                                    '<input type="hidden" name="totalPremium" value="'+dataObj1.totalPremium+'"/>'+
+                                    '<input type="hidden" name="paymentMethod" value="'+"wxpay"+'"/>'+
+                                    '<input type="hidden" name="notifyUrl" value="'+dataObj1.notifyUrl+'"/>'+
+                                    '<input type="hidden" name="returnUrl" value="'+dataObj1.returnUrl+'"/>'+
+                                    '<input type="hidden" name="sign" value="'+dataObj1.sign+'"/>'+
+                                '</form>'+
+                                '<script>document.getElementById("myForm").submit();</script>';                                  ;
                 $("#orderDetaill").append(buyFormHtml);;
                 LoadingCircle&&LoadingCircle.end();
             }, function(error){

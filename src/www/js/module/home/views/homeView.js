@@ -177,7 +177,7 @@ define([
                 LoadingCircle&&LoadingCircle.start();
                 var options = {
                     proposalCode: self.proposalCode,
-                    returnUrl: "http://li.ebaocloud.com.cn/ysmd/index.html" + "#/order/detail/" + self.proposalCode,
+                    returnUrl: "http://li.ebaocloud.com.cn/ysmd/index.html" + "#order/detail/" + self.proposalCode,
                 }
                 homeModel.payment(options, function(data){
                     console.log("报文信息",data);
@@ -195,17 +195,17 @@ define([
                     self.buyFormParameters.NotifyUrl = dataObj1.notifyUrl;
                     self.buyFormParameters.ReturnUrl = dataObj1.returnUrl;
                     self.buyFormParameters.Sign = dataObj1.sign;
-                    console.log(self.buyFormParameters);
-                    console.log(utils.config.paymentUrl);
-                    alert("即将发送post form 请求",utils.config.paymentUrl);
+                    // console.log(self.buyFormParameters);
+                    // console.log(utils.config.paymentUrl);
+                    // alert("即将发送post form 请求",utils.config.paymentUrl);
                     var buyFormHtml='<form id="myForm" method="POST" action="'+utils.config.paymentUrl+'">'+
-                                        '<input type="hidden" name="AgencyCode" value="'+dataObj1.agencyCode+'"/>'+
-                                        '<input type="hidden" name="PolicyRef" value="'+dataObj1.policyRef+'"/>'+
-                                        '<input type="hidden" name="TotalPremium" value="'+dataObj1.totalPremium+'"/>'+
-                                        '<input type="hidden" name="PaymentMethod" value="'+"wxpay"+'"/>'+
-                                        '<input type="hidden" name="NotifyUrl" value="'+dataObj1.notifyUrl+'"/>'+
-                                        '<input type="hidden" name="ReturnUrl" value="'+dataObj1.returnUrl+'"/>'+
-                                        '<input type="hidden" name="Sign" value="'+dataObj1.sign+'"/>'+
+                                        '<input type="hidden" name="agencyCode" value="'+dataObj1.agencyCode+'"/>'+
+                                        '<input type="hidden" name="policyRef" value="'+dataObj1.policyRef+'"/>'+
+                                        '<input type="hidden" name="totalPremium" value="'+dataObj1.totalPremium+'"/>'+
+                                        '<input type="hidden" name="paymentMethod" value="'+"wxpay"+'"/>'+
+                                        '<input type="hidden" name="notifyUrl" value="'+dataObj1.notifyUrl+'"/>'+
+                                        '<input type="hidden" name="returnUrl" value="'+dataObj1.returnUrl+'"/>'+
+                                        '<input type="hidden" name="sign" value="'+dataObj1.sign+'"/>'+
                                     '</form>'+
                                     '<script>document.getElementById("myForm").submit();</script>';                                  ;
 
@@ -1242,7 +1242,7 @@ define([
                 LoadingCircle&&LoadingCircle.end();
                 console.log(erro,"请求职业数据失败");
             });
-            window.sessionStorage.openId = "0k6dtsyJhKE1GmfNz9tb0sJrn_tl";
+            // window.sessionStorage.openId = "0k6dtsyJhKE1GmfNz9tb0sJrn_tl";
             var openId = window.sessionStorage.openId;
             if(!openId || openId==""){
                 var search = window.location.search;
