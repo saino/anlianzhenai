@@ -39,7 +39,8 @@ define([
             LoadingCircle&&LoadingCircle.start();
             var options = {
                 proposalCode: self.proposalCode,
-                returnUrl: "http://li.ebaocloud.com.cn/ysmd/index.html" + "#order/detail/" + self.proposalCode,
+                // returnUrl: "http://li.ebaocloud.com.cn/ysmd/index.html" + "#order/detail/" + self.proposalCode,
+                returnUrl: utils.config.serverUrl + "/ls/services/md/mdProposalRestService/test"
             }
             homeModel.payment(options, function(data){
                 console.log("报文信息",data);
@@ -52,7 +53,7 @@ define([
                 }
 
                 // dataObj1.returnUrl = utils.config.serverUrl + "/ls/services/md/mdProposalRestService/paymentReturn";
-                dataObj1.returnUrl = utils.config.serverUrl + "/ls/services/md/mdProposalRestService/test";
+                // dataObj1.returnUrl = utils.config.serverUrl + "/ls/services/md/mdProposalRestService/test";
                 alert(dataObj1.returnUrl);
                 // console.log(dataObj1);
                 // alert(utils.config.paymentUrl);
