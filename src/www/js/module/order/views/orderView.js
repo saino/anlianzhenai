@@ -65,7 +65,7 @@ define([
                 for(var i=0; i<data.length; i++){
                     var status = "";
                     if(data[i].status == "51"){
-                        status = "已提交";
+                        status = "待支付";
                     }
                     if(data[i].status == "102"){
                      
@@ -74,10 +74,10 @@ define([
                         status = "撤单";
                     }
                     if(data[i].status == "104"){
-                        status = "转账收费中";
+                        status = "待支付";
                     }
                     if(data[i].status == "108"){
-                        status = "转账收费成功";
+                        status = "已承保";
                     }
                     if(data[i].status == "105"){
                         status = "转账收费失败";

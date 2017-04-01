@@ -50,6 +50,10 @@ define([
                     var dataObjvalue = dataObj[i].split("=")[1];
                     dataObj1[dataObjKey] = dataObjvalue;
                 }
+
+                // dataObj1.returnUrl = utils.config.serverUrl + "/ls/services/md/mdProposalRestService/paymentReturn";
+                dataObj1.returnUrl = utils.config.serverUrl + "/ls/services/md/mdProposalRestService/test";
+                alert(dataObj1.returnUrl);
                 // console.log(dataObj1);
                 // alert(utils.config.paymentUrl);
                 // alert("aabb.html");
@@ -144,7 +148,7 @@ define([
 
                     var status = "";
                     if(orderDetaill.status == "51"){
-                        status = "已提交";
+                        status = "待支付";
                     }
                     if(orderDetaill.status == "102"){
                      
@@ -153,10 +157,10 @@ define([
                         status = "撤单";
                     }
                     if(orderDetaill.status == "104"){
-                        status = "转账收费中";
+                        status = "待支付";
                     }
                     if(orderDetaill.status == "108"){
-                        status = "转账收费成功";
+                        status = "已承保";
                     }
                     if(orderDetaill.status == "105"){
                         status = "转账收费失败";

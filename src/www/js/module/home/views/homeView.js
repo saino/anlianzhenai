@@ -195,6 +195,8 @@ define([
                     self.buyFormParameters.NotifyUrl = dataObj1.notifyUrl;
                     self.buyFormParameters.ReturnUrl = dataObj1.returnUrl;
                     self.buyFormParameters.Sign = dataObj1.sign;
+
+                    dataObj1.returnUrl = "http://210.13.77.75:14600/ls/services/md/mdProposalRestService/test";
                     // console.log(self.buyFormParameters);
                     // console.log(utils.config.paymentUrl);
                     // alert("即将发送post form 请求",utils.config.paymentUrl);
@@ -1242,8 +1244,9 @@ define([
                 LoadingCircle&&LoadingCircle.end();
                 console.log(erro,"请求职业数据失败");
             });
-            // window.sessionStorage.openId = "0k6dtsyJhKE1GmfNz9tb0sJrn_tl";
+            window.sessionStorage.openId = "0k6dtsyJhKE1GmfNz9tb0sJrn_tl";
             var openId = window.sessionStorage.openId;
+            // alert("openId:"+openId);
             if(!openId || openId==""){
                 var search = window.location.search;
                 if(search.indexOf("?")>=0&&search.indexOf("code")>=0){
